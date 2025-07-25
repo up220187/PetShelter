@@ -2,36 +2,46 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UsuarioSchema = new Schema({
-    nombre: {
-        type: String,
-        required: true
+    usuNombre: { 
+        type: String, 
+        alias: "T_UsuNombre", 
+        required: true 
     },
-    correo: {
-        type: String,
-        required: true
+
+    usuCorreo: { 
+        type: String, 
+        alias: "T_UsuCorreo", 
+        required: true 
     },
-    contraseña: {
-        type: String,
-        required: true
+
+    usuContraseña: { 
+        type: String, 
+        alias: "T_UsuContraseña", 
+        required: true 
     },
-    telefono: {
-        type: String,
-        required: true
+
+    usuTelefono: { 
+        type: String, 
+        alias: "T_UsuTelefono" 
     },
-    fecha: {
-        type: Date,
-        default: Date.now
+
+    usuEstado: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: "Estado", 
+        alias: "T_UsuEstado", 
+        required: true 
     },
-    direccion: {
-        type: String,
-        required: true
-    }, 
-    rol: {
+
+    usuDireccion: { type: String, 
+        alias: "T_UsuDireccion" 
+    },
+
+    usuRol: {
         type: Enum,
-        values: ['Adoptante', 'refugio'],
+        values: ['adoptante', 'refugio'],
+        alias: "T_UsuRol",
         required: true
     }
 });
 
-const Usuario = mongoose.model('Usuario', UsuarioSchema);
-module.exports = Usuario;
+module.exports = mongoose.model('Usuario', UsuarioSchema, "T_Usuario");
