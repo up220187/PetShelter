@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const databaseErrorHandler = require('../middlewares/databaseErrorHandler')
+
 require('dotenv').config();
 
 const connectDB = async (app) => {

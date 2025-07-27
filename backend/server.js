@@ -1,14 +1,16 @@
 const express = require('express');
+
+const swagger = require('./src/middlewares/swagger')
+
 const connectDB = require('./src/configs/database')
-const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 const hostname = 'localhost';
 
-require('dotenv').config();
 app.use(express.json());
 
 connectDB();
+swagger(app);
 
 //Rutas
 app.use('/estados', require('./src/routes/estadoRoutes'));
