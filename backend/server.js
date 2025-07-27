@@ -1,16 +1,30 @@
 const express = require('express');
+const connectDB = require('./src/configs/database')
 const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 const hostname = 'localhost';
 
+require('dotenv').config();
 app.use(express.json());
+
+connectDB();
 
 //Rutas
 app.use('/estados', require('./src/routes/estadoRoutes'));
 app.use('/mascotas', require('./src/routes/mascotaRoutes'));
 app.use('/refugios', require('./src/routes/refugioRoutes'));
 app.use('/seguimientos', require('./src/routes/seguimientoRoutes'));
+app.use('/tiposMascotas', require('./src/routes/tipoMascotaRoutes'));
+app.use('/solicitudes', require('./src/routes/solicitudAdopcionRoutes'));
+app.use('/usuarios', require('./src/routes/usuarioRoutes'));
+app.use('/visitas', require('./src/routes/visitaRoutes'));
+
+
+app.get('/', (req, res) => {
+    res.send('Servidor corriendo');
+});
+
 
 app.listen(3000, () => {
     console.log(`Servidor corriendo en http://${hostname}:${port}`);

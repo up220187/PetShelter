@@ -37,7 +37,7 @@ const UsuarioSchema = new Schema({
     },
 
     usuRol: {
-        type: Enum,
+        type: String,
         values: ['adoptante', 'refugio'],
         alias: "T_UsuRol",
         required: true
