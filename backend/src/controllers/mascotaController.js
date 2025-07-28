@@ -1,5 +1,27 @@
 const Mascota = require('../models/Mascota');
 
+/**
+ * @swagger
+ * /mascotas:
+ *   post:
+ *     summary: Crear una nueva mascota
+ *     tags: [Mascotas]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Mascota'
+ *     responses:
+ *       201:
+ *         description: Mascota creada exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Mascota'
+ *       400:
+ *         description: Error en la solicitud
+ */
 exports.crearMascota = async (req, res) => {
   try {
     const mascota = new Mascota(req.body);
@@ -10,6 +32,24 @@ exports.crearMascota = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /mascotas:
+ *   get:
+ *     summary: Obtener todas las mascotas
+ *     tags: [Mascotas]
+ *     responses:
+ *       200:
+ *         description: Lista de mascotas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Mascota'
+ *       500:
+ *         description: Error interno del servidor
+ */
 exports.obtenerMascotas = async (req, res) => {
   try {
     const mascotas = await Mascota.find()
@@ -21,6 +61,30 @@ exports.obtenerMascotas = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /mascotas/{id}:
+ *   get:
+ *     summary: Obtener una mascota por ID
+ *     tags: [Mascotas]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Mascota encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Mascota'
+ *       404:
+ *         description: Mascota no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
 exports.obtenerMascotaPorId = async (req, res) => {
   try {
     const mascota = await Mascota.findById(req.params.id)

@@ -1,5 +1,23 @@
 const SolicitudAdopcion = require('../models/SolicitudAdopcion');
 
+/**
+ * @swagger
+ * /solicitudes:
+ *   post:
+ *     summary: Crear una nueva solicitud de adopción
+ *     tags: [SolicitudesAdopcion]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SolicitudAdopcion'
+ *     responses:
+ *       201:
+ *         description: Solicitud creada exitosamente
+ *       400:
+ *         description: Error en los datos proporcionados
+ */
 exports.crearSolicitud = async (req, res) => {
   try {
     const solicitud = new SolicitudAdopcion(req.body);
@@ -10,6 +28,24 @@ exports.crearSolicitud = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /solicitudes:
+ *   get:
+ *     summary: Obtener todas las solicitudes de adopción
+ *     tags: [SolicitudesAdopcion]
+ *     responses:
+ *       200:
+ *         description: Lista de solicitudes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/SolicitudAdopcion'
+ *       500:
+ *         description: Error del servidor
+ */
 exports.obtenerSolicitudes = async (req, res) => {
   try {
     const solicitudes = await SolicitudAdopcion.find()
@@ -21,6 +57,30 @@ exports.obtenerSolicitudes = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /solicitudes/{id}:
+ *   put:
+ *     summary: Actualizar una solicitud de adopción por ID
+ *     tags: [SolicitudesAdopcion]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SolicitudAdopcion'
+ *     responses:
+ *       200:
+ *         description: Solicitud actualizada
+ *       400:
+ *         description: Error al actualizar la solicitud
+ */
 exports.actualizarSolicitud = async (req, res) => {
   try {
     const solicitud = await SolicitudAdopcion.findByIdAndUpdate(
