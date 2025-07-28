@@ -13,20 +13,6 @@ const options = {
                 url: process.env.SWAGGER_SERVER_URL || 'http://localhost:3000/api-docs',
             },
         ],
-        components : {
-            securitySchemes: {
-                bearerAuth: {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'JWT',
-                },
-            },
-        },
-        security : [
-            {
-                bearerAuth: [],
-            },
-        ],
     },
     apis: ['./src/routes/*.js', './src/controllers/*.js', './src/models/*.js'],
 };
