@@ -1,37 +1,27 @@
 import React from "react";
 
-interface VerMascotasButtonProps {
+interface SolicitarAdopcionButtonProps {
   className?: string;
-  divClassName?: string;
   onClick?: () => void;
 }
 
-export default function VerMascotasButton({ className, divClassName, onClick }: VerMascotasButtonProps) {
+export default function SolicitarAdopcionButton({ className = "", onClick }: SolicitarAdopcionButtonProps) {
   return (
-    <button 
-      className={`relative w-[200px] h-[60px] bg-transparent ${className}`} 
-      style={{ 
-        boxShadow: '5px 5px 4px #00000040',
-        border: 'none',
-        outline: 'none'
-      }}
+    <button
       onClick={onClick}
+      className={`
+        px-4 py-2 w-[200px] h-[60px]
+        bg-[#E5D585] text-[#261C14]
+        rounded-full text-[16px] font-normal
+        shadow-[5px_5px_4px_rgba(0,0,0,0.25)]
+        flex items-center justify-center
+        hover:brightness-105 active:brightness-95
+        transition duration-150 ease-in-out
+        ${className}
+      `}
+      style={{ fontFamily: 'Lato, sans-serif' }}
     >
-      <div className="relative h-[61px] -top-[1px]">
-        <div 
-          className="absolute left-0 top-[1px] w-[200px] h-[60px] bg-[#E5D585] rounded-[25px] opacity-80"
-        />
-        <div 
-          className={`absolute left-0 top-0 w-[200px] h-[60px] text-[#261C14] text-[24px] font-normal text-center flex items-center justify-center ${divClassName}`}
-          style={{ 
-            fontFamily: 'Lato, sans-serif',
-            letterSpacing: '0',
-            lineHeight: 'normal'
-          }}
-        >
-          Ver mascotas
-        </div>
-      </div>
+      Solicitar adopción
     </button>
   );
 }
