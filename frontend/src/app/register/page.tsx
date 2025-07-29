@@ -1,6 +1,6 @@
 "use client";
 import RegisterForm from "../components/RegisterForm";
-import VerMascotasButton from "../components/VerMascotasButton";
+import VerMascotasButton from "../components/Adoptante/VerMascotastsx";
 
 
 export default function RegisterPage() {
