@@ -1,13 +1,23 @@
 "use client";
 import RegisterForm from "../components/RegisterForm";
-import VerMascotasButton from "../components/Adoptante/VerMascotas.tsx";
+import VerMascotas from "../components/Adoptante/VerMascotas";
+import SolicitarAdopcion from "../components/Adoptante/SolicitarAdopcion";
+import AdministrarVisita from "../components/Adoptante/AdministrarVisita";
+import AdministrarPerfil from "../components/Adoptante/AdministrarPerfil";
+import Footer from "../components/Footer";
+import Buscador from "../components/Buscador";
 
 
 export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
+      <Buscador />
       {/* Header hasta arriba que cubre todo */}
       
+          <VerMascotas/>
+          <SolicitarAdopcion />
+          <AdministrarVisita />
+          <AdministrarPerfil />
       
       {/* Contenido principal */}
       <div className="flex flex-col items-center justify-center pt-8">
@@ -29,10 +39,11 @@ export default function RegisterPage() {
 
         {/* Formulario centrado */}
         <div className="relative z-10">
-          <VerMascotasButton/>
           <RegisterForm />
         </div>
       </div>
+      <Footer />
     </div>
+    
   );
 }

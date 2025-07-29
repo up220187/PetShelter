@@ -1,11 +1,11 @@
 import React from "react";
 
-interface VerMascotasButtonProps {
+interface AdministrarVisitaButtonProps {
   className?: string;
   onClick?: () => void;
 }
 
-export default function VerMascotasButton({ className = "", onClick }: VerMascotasButtonProps) {
+export default function AdministrarVisitaButton({ className = "", onClick }: AdministrarVisitaButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -21,7 +21,7 @@ export default function VerMascotasButton({ className = "", onClick }: VerMascot
       `}
       style={{ fontFamily: 'Lato, sans-serif' }}
     >
-      Ver mascotas
+      Administrar visita
     </button>
   );
 }
