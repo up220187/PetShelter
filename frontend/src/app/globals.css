@@ -1,40 +1,168 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
- *
- {
+body {
+  background-color: #FF8442;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  min-height: 100vh; 
+  font-family: Arial, sans-serif; 
+  position: relative; 
+  overflow: hidden; 
 }
 
-body {
-  background-color: #FF8442; 
-  font-family: 'Arial', sans-serif;
-  color: #000000;
+/* --- Estilos para el contenedor de la imagen de huellas como FONDO GLOBAL --- */
+.global-paws-background {
+  position: absolute;
+  top: 0;
+  left: 900px;
+  width: 33%;
+  height: 100%;
+  background-image: url('/paws.png'); 
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  opacity: 1; 
+  z-index: 0; 
+  pointer-events: none; 
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* --- Estilos para el contenedor del contenido principal --- */
+.main-content-wrapper {
+  z-index: 10; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  justify-content: center; 
+  width: 100%; 
+  min-height: 100vh; 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* --- Estilos para el logo --- */
+
+.logo-container img {
+  width: 320px; 
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* --- Estilos para el contenedor del formulario  --- */
+.form-box {
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 448px; 
 }
 
+/* --- Estilos internos del formulario --- */
+.form-content-wrapper {
+  flex-direction: column;
+  align-items: center; 
+}
 
+.form-title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #374151;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.form-subtitle {
+  color: #4b5563;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.form-field {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.form-field:last-of-type {
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block;
+  color: #374151;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.form-input {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 42px;
+  padding-right: 16px;
+  color: #374151;
+  line-height: 1.25;
+  outline: none;
+}
+
+.form-input:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* --- Estilos para el botón de registrar --- */
+.register-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24px;
+  width: 100%; 
+}
+
+.register-button {
+  background-color: #F97316; 
+  color: white;
+  font-weight: bold;
+  padding: 12px 32px; 
+  border-radius: 9999px; 
+  border: none;
+  cursor: pointer;
+  font-size: 18px; 
+  transition-property: background-color;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  outline: none;
+  display: inline-block; 
+  margin-left: 11%;
+}
+
+.register-button:hover {
+  background-color: #EA580C;
+}
+
+.register-button:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+/* --- Estilos para inicia sesión --- */
+.login-link-wrapper {
+  margin-top: 20px; 
+  text-align: center;
+  width: 100%;
+}
+
+.login-link-text {
+  color: #4b5563;
+  font-size: 14px; 
+}
+
+.login-link-text a {
+  color: #F97316; 
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link-text a:hover {
+  text-decoration: underline;
+}
