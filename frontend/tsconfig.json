@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/components/Adoptante/VerMascotastsx"  ],
+, "src/app/components/Adoptante/VerMascotas.tsx"  ],
   "exclude": [
     "node_modules"
   ]
