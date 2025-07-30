@@ -4,6 +4,18 @@
   --background: #ffffff;
   --foreground: #171717;
 }
+ *
+ {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #FF8442; 
+  font-family: 'Arial', sans-serif;
+  color: #000000;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -24,3 +36,5 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
