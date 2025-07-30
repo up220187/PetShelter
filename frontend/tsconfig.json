@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/components/Adoptante/VerMascotas.tsx"  ],
+, "src/app/components/Adoptante/VerMascotas.tsx", "src/app/components/Refugio/confirmarAdopciones.tsx"  ],
   "exclude": [
     "node_modules"
   ]
