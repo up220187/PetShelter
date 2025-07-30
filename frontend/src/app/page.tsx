@@ -1,13 +1,39 @@
+'use client';
+
 import Image from "next/image";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
+import CheckButton from './components/icon/CheckButton';
+import CloseCircleIcon from './components/icon/CloseCircleIcon';
+import EditDocumentIcon from './components/icon/EditDocumentIcon';
+import AddSquareIcon from './components/icon/AddSquareIcon';
+import LocationPinIcon from './components/icon/LocationPinIcon';
+import FilterFunnelIcon from './components/icon/FilterFunnelIcon';
+import SearchIcon from './components/icon/SearchIcon';
+
+
+
 
 export default function Home() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <TodoInput/>
+        <TodoInput />
+
+        {/* Componentes personalizados del proyecto */}
+        <div className="flex flex-col gap-4 w-full max-w-md">
+          <CheckButton />
+          <CloseCircleIcon />
+          <EditDocumentIcon />
+          <AddSquareIcon />
+          <LocationPinIcon />
+          <FilterFunnelIcon />
+          <SearchIcon />
+        </div>
+
         
+
+        {/* Logo de Next */}
         <Image
           className="dark:invert"
           src="/next.svg"
@@ -16,6 +42,8 @@ export default function Home() {
           height={38}
           priority
         />
+
+        {/* Instrucciones */}
         <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2 tracking-[-.01em]">
             Get started by editing{" "}
@@ -29,6 +57,7 @@ export default function Home() {
           </li>
         </ol>
 
+        {/* Botones de documentación y despliegue */}
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
             className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
@@ -55,6 +84,8 @@ export default function Home() {
           </a>
         </div>
       </main>
+
+      {/* Footer */}
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
