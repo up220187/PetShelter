@@ -31,14 +31,3 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log(`Servidor corriendo en http://${hostname}:${port}`);
 });
-
-// Manejo de rutas no encontradas
-app.use((req, res, next) => {
-    res.status(404).json({ error: 'Ruta no encontrada' });
-});
-
-// Middleware de error general
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Error interno del servidor' });
-});
