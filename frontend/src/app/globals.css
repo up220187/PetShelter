@@ -636,3 +636,212 @@ html, body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
   z-index: 1; 
 }
+
+
+
+/* --- Estilos Específicos para la Página de Administrar Perfil del Adoptante --- */
+.profile-management-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1000px; /* Ajusta el ancho según necesites */
+  width: 95%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre las secciones principales */
+  margin: 20px auto; /* Centra el contenedor en la página */
+}
+
+.profile-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f97316; /* Naranja fuerte */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-areas:
+    "image-area name-area"
+    "image-area description-area"
+    "image-area contact-area"
+    "image-area personal-area"
+    "image-area additional-area";
+  grid-template-columns: 1fr 2fr; /* Una columna para la imagen, dos para el resto */
+  grid-template-rows: auto auto auto auto auto; /* Filas automáticas para las secciones */
+  gap: 20px; /* Espacio entre los elementos de la cuadrícula */
+}
+
+.profile-image-section {
+  grid-area: image-area; /* Asigna el área de la imagen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Alinea la imagen arriba */
+  padding-right: 20px; /* Espacio a la derecha de la imagen */
+  border-right: 1px solid #eee; /* Separador visual */
+}
+
+/* Estilos para el div que representa el espacio de la foto de perfil vacía */
+.profile-picture-empty {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%; /* Hacerlo circular */
+  background-color: #f0f0f0; /* Un color de fondo gris claro para el espacio */
+  border: 3px solid #E5D585; /* Borde amarillo alrededor */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  display: flex; /* Para centrar un posible icono o texto dentro si se desea */
+  align-items: center;
+  justify-content: center;
+  color: #aaa; /* Color para un posible icono o texto */
+  font-size: 3rem; /* Tamaño grande para un icono */
+  /* Puedes añadir un icono de usuario SVG o Font Awesome aquí dentro del HTML si quieres */
+}
+
+
+/* Nuevas secciones de la cuadrícula (ajustadas para inputs/textareas) */
+.profile-name-section {
+  grid-area: name-area;
+  background-color: #fff; /* Blanco */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-description-section {
+  grid-area: description-area;
+  background-color: #fff; /* Blanco */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-contact-section {
+  grid-area: contact-area;
+  background-color: #fef3c7; /* Un fondo amarillo muy claro */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-personal-data-section {
+  grid-area: personal-area;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-additional-info-section {
+  grid-area: additional-area;
+  background-color: #fef3c7; /* Un fondo amarillo muy claro */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #E5D585; /* Línea de separación debajo del título */
+  padding-bottom: 5px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.profile-input,
+.profile-textarea {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  box-sizing: border-box; /* Incluye padding y borde en el width/height */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-input:focus,
+.profile-textarea:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  outline: none;
+}
+
+.profile-textarea {
+  resize: vertical; /* Permite redimensionar verticalmente */
+  min-height: 80px; /* Altura mínima para el textarea */
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.save-button,
+.cancel-button {
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  border: none;
+}
+
+.save-button {
+  background-color: #f97316; /* Naranja fuerte */
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #EA580C;
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #bbb;
+  transform: translateY(-2px);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+    grid-template-areas:
+      "image-area"
+      "name-area"
+      "contact-area"
+      "description-area"
+      "personal-area"
+      "additional-area";
+  }
+
+  .profile-image-section {
+    border-right: none; 
+    padding-right: 0;
+  }
+}
