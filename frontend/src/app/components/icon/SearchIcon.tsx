@@ -17,7 +17,7 @@ const SearchIcon: React.FC<IconProps> = ({
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
-      viewBox="0 0 35 35"
+      viewBox="0 0 45 45"
       fill="none"
       {...props}
     >
