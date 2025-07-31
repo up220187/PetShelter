@@ -168,3 +168,152 @@ body {
 .login-link-text a:hover {
   text-decoration: underline;
 }
+
+
+
+/* dasboard */
+.paws-bg {
+  position: absolute;
+  top: -146px;
+  left: -40px;
+  width: 30%;
+  height: auto;
+  opacity: 1;
+  z-index: 0;
+}
+
+.paws2-right {
+  position: absolute;
+  bottom: 80px;
+  right: 0;
+  width: 15%;
+  height: auto;
+  opacity: 1;
+  z-index: 0;
+}
+
+
+.logo-wrapper {
+  margin-bottom: 40px;
+  z-index: 1;
+}
+
+.main-logo {
+  width: 350px;
+  height: auto;
+}
+
+.buttons-wrapper {
+  display: flex;
+  gap: 20px;
+  z-index: 1;
+  margin-bottom: 40px;
+}
+
+.login-btn,
+.register-btn {
+  background-color: #E5D585;
+  color: #000;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+  transform: scale(1.05);
+}
+
+.main-footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 12px;
+  color: #fff;
+  background-color: #f97316;
+}
+
+
+
+
+
+
+
+
+
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: sans-serif;
+}
+
+
+
+/* Sección del logo y botones */
+.home-container {
+  background-color: #FF8442;
+  padding: 4rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Sección de características */
+.features-section {
+  background-color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.features-section h2 {
+  font-size: 2rem;
+  color: #f97316;
+  margin-bottom: 2rem;
+}
+
+.features-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.feature-card {
+  background: #fff7ed;
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 220px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.feature-card h3 {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #f97316;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: #444;
+}
