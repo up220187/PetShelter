@@ -235,16 +235,6 @@ body {
   background-color: #f97316;
 }
 
-
-
-
-
-
-
-
-
-
-
 html, body {
   margin: 0;
   padding: 0;
@@ -253,8 +243,6 @@ html, body {
   overflow-y: auto;
   font-family: sans-serif;
 }
-
-
 
 /* Sección del logo y botones */
 .home-container {
@@ -266,18 +254,6 @@ html, body {
   justify-content: center;
   position: relative;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Sección de características */
 .features-section {
@@ -316,4 +292,556 @@ html, body {
 .feature-card p {
   font-size: 0.9rem;
   color: #444;
+}
+
+
+
+
+
+/* adoptantes */
+
+.adoptante-layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f0f0; 
+}
+
+.adoptante-header {
+  background-color: #FF8442; 
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logo-section img {
+  width: 100px;
+}
+
+.search-and-nav-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 15px;
+}
+
+.search-bar-wrapper {
+  background-color: #fff;
+  border-radius: 25px;
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  max-width: 600px; 
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  flex-grow: 1;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.search-icon, .filter-icon {
+  color: #f97316; 
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.adoptante-nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.nav-button {
+  background-color: #E5D585;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #d8c772;
+}
+
+.adoptante-main-content {
+  flex-grow: 1;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dashboard-content {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  display: flex;
+  gap: 40px;
+  max-width: 900px; 
+  width: 100%;
+}
+
+.placeholder-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 300px;
+  height: 400px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.placeholder-text {
+  color: #999;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.details-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.detail-line {
+  background-color: #e0e0e0;
+  height: 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 80%;
+}
+
+.detail-line.short {
+  width: 60%;
+}
+
+.adoptante-footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 12px;
+  color: #fff;
+  background-color: #f97316; 
+}
+
+.left-content {
+    flex: 2; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  margin-left: 20px;
+}
+
+.adopta-perro-image {
+  border-radius: 8px;
+}
+
+.right-content {
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px;
+}
+
+.background-dog-image {
+  z-index: 0; 
+  opacity: 0.2; 
+}
+
+.text-overlay {
+  position: relative; 
+  z-index: 1; 
+  color: #333;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.text-overlay p {
+  margin-bottom: 15px;
+}
+
+.text-overlay .agenda-text {
+  font-size: 1.1rem; 
+}
+
+.text-overlay .mission-text {
+  font-weight: bold;
+  color: #f97316;
+  font-size: 1.3rem;
+  margin-top: 30px; 
+}
+
+/* --- Estilos para el Dashboard del Adoptante (dashboard/customer/page.tsx) --- */
+
+.shelter-layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #FF8442; 
+}
+
+.shelter-header {
+  background-color: #f97316; 
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-bottom: 2px solid #E5D585; 
+}
+
+.shelter-header .logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.shelter-header .logo-section img {
+    height: 80px; 
+    width: auto;
+}
+
+
+.shelter-nav {
+  display: flex;
+  gap: 15px; 
+}
+
+.shelter-nav .nav-button {
+  background-color: #E5D585; 
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 25px; 
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.shelter-nav .nav-button:hover {
+  background-color: #f97316;
+  color: #fff;
+  transform: translateY(-2px); 
+}
+
+.shelter-main-content {
+  flex-grow: 1;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+.shelter-footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 12px;
+  color: #fff;
+  background-color: #f97316;
+  margin-top: auto;
+}
+
+
+.shelter-dashboard-content {
+  background-color: white; 
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1200px; 
+  width: 95%;
+  height: 400px; 
+  margin: 20px auto; 
+  display: flex; 
+  position: relative;
+  overflow: hidden;
+}
+
+.shelter-left-content {
+  flex: 3; 
+  position: relative; 
+  overflow: hidden; 
+  padding: 30px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: flex-start; 
+}
+
+.shelter-left-background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.15;
+  z-index: 1;
+}
+
+.shelter-text-overlay {
+  position: relative; 
+  z-index: 2; 
+  padding: 20px; 
+  border-radius: 8px; 
+  text-align: left;
+  width: 100%; 
+}
+
+.shelter-text-overlay p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.shelter-text-overlay p:last-child {
+  margin-bottom: 0;
+}
+
+.shelter-mission-text {
+  font-weight: bold;
+  color: #f97316;
+  margin-top: 20px;
+}
+
+.shelter-right-content {
+  flex: 2; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.shelter-right-dog-image {
+  border-radius: 8px; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  z-index: 1; 
+}
+
+
+
+/* --- Estilos Específicos para la Página de Administrar Perfil del Adoptante --- */
+.profile-management-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1000px; /* Ajusta el ancho según necesites */
+  width: 95%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espacio entre las secciones principales */
+  margin: 20px auto; /* Centra el contenedor en la página */
+}
+
+.profile-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f97316; /* Naranja fuerte */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-areas:
+    "image-area name-area"
+    "image-area description-area"
+    "image-area contact-area"
+    "image-area personal-area"
+    "image-area additional-area";
+  grid-template-columns: 1fr 2fr; /* Una columna para la imagen, dos para el resto */
+  grid-template-rows: auto auto auto auto auto; /* Filas automáticas para las secciones */
+  gap: 20px; /* Espacio entre los elementos de la cuadrícula */
+}
+
+.profile-image-section {
+  grid-area: image-area; /* Asigna el área de la imagen */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Alinea la imagen arriba */
+  padding-right: 20px; /* Espacio a la derecha de la imagen */
+  border-right: 1px solid #eee; /* Separador visual */
+}
+
+/* Estilos para el div que representa el espacio de la foto de perfil vacía */
+.profile-picture-empty {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%; /* Hacerlo circular */
+  background-color: #f0f0f0; /* Un color de fondo gris claro para el espacio */
+  border: 3px solid #E5D585; /* Borde amarillo alrededor */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  display: flex; /* Para centrar un posible icono o texto dentro si se desea */
+  align-items: center;
+  justify-content: center;
+  color: #aaa; /* Color para un posible icono o texto */
+  font-size: 3rem; /* Tamaño grande para un icono */
+  /* Puedes añadir un icono de usuario SVG o Font Awesome aquí dentro del HTML si quieres */
+}
+
+
+/* Nuevas secciones de la cuadrícula (ajustadas para inputs/textareas) */
+.profile-name-section {
+  grid-area: name-area;
+  background-color: #fff; /* Blanco */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-description-section {
+  grid-area: description-area;
+  background-color: #fff; /* Blanco */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-contact-section {
+  grid-area: contact-area;
+  background-color: #fef3c7; /* Un fondo amarillo muy claro */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-personal-data-section {
+  grid-area: personal-area;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-additional-info-section {
+  grid-area: additional-area;
+  background-color: #fef3c7; /* Un fondo amarillo muy claro */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #E5D585; /* Línea de separación debajo del título */
+  padding-bottom: 5px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.profile-input,
+.profile-textarea {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  box-sizing: border-box; /* Incluye padding y borde en el width/height */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-input:focus,
+.profile-textarea:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  outline: none;
+}
+
+.profile-textarea {
+  resize: vertical; /* Permite redimensionar verticalmente */
+  min-height: 80px; /* Altura mínima para el textarea */
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.save-button,
+.cancel-button {
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  border: none;
+}
+
+.save-button {
+  background-color: #f97316; /* Naranja fuerte */
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #EA580C;
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #bbb;
+  transform: translateY(-2px);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+    grid-template-areas:
+      "image-area"
+      "name-area"
+      "contact-area"
+      "description-area"
+      "personal-area"
+      "additional-area";
+  }
+
+  .profile-image-section {
+    border-right: none; 
+    padding-right: 0;
+  }
 }
