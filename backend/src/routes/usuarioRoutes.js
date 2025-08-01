@@ -5,8 +5,7 @@ const authMiddleware = require('../middlewares/authMiddlewares');
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 
-router.post('/' [
-    body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
+router.post('/', [
     body('email').isEmail().withMessage('Debe ser un correo electrónico válido'),
     body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres')
 ], validate, usuarioController.crearUsuario);
@@ -26,7 +25,6 @@ router.get('/:id', [
 router.put('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido'),
-    body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('email').isEmail().withMessage('Debe ser un correo electrónico válido'),
     body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres')
 ], validate, usuarioController.actualizarUsuario);

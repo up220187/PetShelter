@@ -52,7 +52,6 @@ const UsuarioSchema = new Schema({
     usuNombre: { 
         type: String, 
         alias: "T_UsuNombre", 
-        required: true 
     },
 
     usuCorreo: { 
@@ -86,7 +85,6 @@ const UsuarioSchema = new Schema({
         type: String,
         values: ['adoptante', 'refugio'],
         alias: "T_UsuRol",
-        required: true
     }
 });
 

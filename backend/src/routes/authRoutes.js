@@ -12,7 +12,6 @@ router.post('/login', [
 
 router.post('/register', [
     registerLimiter,
-    body('usuNombre').notEmpty().isLength(50).withMessage('El nombre es requerido'),
     body('usuCorreo').isEmail().withMessage('El correo electrónico no es valido'),
     body('usuContraseña').isLength({ min: 5 }).withMessage('La contrasena debe tener al menos 5 caracteres')
 ], validate, authController.register);
