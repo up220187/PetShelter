@@ -6,7 +6,6 @@ const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
 
 router.post('/' [
-    authMiddleware,
     body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
     body('email').isEmail().withMessage('Debe ser un correo electrónico válido'),
     body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres')
@@ -18,10 +17,6 @@ router.get('/', [
     query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer')
 ], validate, usuarioController.obtenerUsuarios);
 
-router.post('/login'[
-    body('email').isEmail().withMessage('Debe ser un correo electrónico válido'),
-    body('password').notEmpty().withMessage('La contraseña es obligatoria')
-], validate, usuarioController.loginUsuario);
 
 router.get('/:id', [
     authMiddleware,

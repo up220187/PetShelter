@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/Usuario');
+const RefreshToken = require('../models/RefreshToken');
 const router = express.Router();
 
 const generateToken = (userId, usuNombre) => jwt.sign({ userId, usuNombre }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -72,6 +73,7 @@ exports.register = async (req, res) => {
 };
 
 /**
+ * @swagger
  * /auth/login:
  *   post:
  *     summary: Inicia sesión de usuario
@@ -137,3 +139,83 @@ exports.login = async (req, res) => {
     }
 };
 
+
+/**
+ * @swagger
+ * /auth/refresh-token:
+ *   post:
+ *     summary: Refresca el token de acceso
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: Token de refresco
+ *     responses:
+ *       200:
+ *         description: Token refrescado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: Nuevo token de acceso
+ *                 refreshToken:
+ *                   type: string
+ *                   description: Nuevo token de refresco
+ *       400:
+ *         description: Token de refresco inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+const generateRefreshToken = async (userId, usuNombre) => {
+    const refreshToken = jwt.sign({ userId, usuNombre }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+    await RefreshToken.create({ userId, token: refreshToken });
+    return refreshToken;
+};
+
+exports.refreshToken = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+
+        if (!refreshToken) {
+            return res.status(400).json({ message: 'El token de refresco es requerido' });
+        }
+
+        const existingToken = await RefreshToken.findOne({ token: refreshToken });
+        if (!existingToken) {
+            return res.status(400).json({ message: 'Token de refresco inválido' });
+        }
+
+        let decoded;
+        try {
+            decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        } catch (err) {
+            return res.status(400).json({ message: 'Token de refresco inválido' });
+        }
+
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            return res.status(400).json({ message: 'Usuario no existe' });
+        }
+
+        const token = generateToken(user._id, user.usuNombre);
+        const newRefreshToken = await generateRefreshToken(user._id, user.usuNombre);
+
+        await existingToken.deleteOne();
+
+        res.status(200).json({ token, refreshToken: newRefreshToken });
+    } catch (error) {
+        errorHandler(error, req, res);
+    }
+};

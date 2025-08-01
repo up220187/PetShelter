@@ -21,6 +21,7 @@ app.use('/tiposMascotas', require('./src/routes/tipoMascotaRoutes'));
 app.use('/solicitudes', require('./src/routes/solicitudAdopcionRoutes'));
 app.use('/usuarios', require('./src/routes/usuarioRoutes'));
 app.use('/visitas', require('./src/routes/visitaRoutes'));
+app.use('/auth', require('./src/routes/authRoutes'));
 
 
 app.get('/', (req, res) => {
