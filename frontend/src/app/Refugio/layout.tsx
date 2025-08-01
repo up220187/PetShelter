@@ -24,16 +24,16 @@ export default function ShelterDashboardLayout({
         </div>
         <div className="search-and-nav-sectionn">
           <nav className="shelter-nav">
-            <Link href="/dashboard/shelter/administrar-mascotas">
+            <Link href="/Refugio/administrarmascotas">
               <AdministrarMascotasButton />
             </Link>
-            <Link href="/dashboard/shelter/confirmar-adopciones">
+            <Link href="/Refugio/confirmaradopciones">
               <ConfirmarAdopcionesButton />
             </Link>
-            <Link href="/dashboard/shelter/administrar-solicitudes">
+            <Link href="/Refugio/administrarsolicitudes">
               <AdministrarSolicitudesButton />
             </Link>
-            <Link href="/dashboard/shelter/administrar-refugio">
+            <Link href="/Refugio/administrarrefugio">
               <AdministrarRefugioButton />
             </Link>
           </nav>

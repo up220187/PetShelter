@@ -1,7 +1,7 @@
+// src/app/dashboard/customer/profile/page.tsx
 "use client";
 
-import Image from "next/image";
-// No necesitamos importar una imagen de placeholder si el espacio quedará en blanco.
+import Image from "next/image"; // Aunque no importamos una imagen, mantenemos la importación de Image por si acaso.
 
 export default function AdoptanteProfilePage() {
   return (
@@ -9,35 +9,23 @@ export default function AdoptanteProfilePage() {
       <h1 className="profile-title">Administrar Perfil</h1>
 
       <div className="profile-grid">
-        {/* Sección de la imagen de perfil (espacio en blanco para la foto) */}
+        {/* Sección de la imagen de perfil (espacio en blanco para la foto), similar al logo del refugio */}
         <div className="profile-image-section">
-          {/* Este div representará el espacio para la foto de perfil vacía */}
           <div className="profile-picture-empty"></div>
+          {/* Opcional: Input para subir foto de perfil */}
+          <input type="file" id="profile-picture-upload" className="file-upload-input" />
+          <label htmlFor="profile-picture-upload" className="file-upload-label">Subir Foto de Perfil</label>
         </div>
 
-        {/* Sección del nombre del usuario (vacía) */}
+        {/* Sección del nombre del usuario (vacía), movida para que quede al lado de la descripción o en una celda propia */}
         <div className="profile-name-section">
-          <h2 className="section-title">Nombre del Usuario</h2>
-          {/* Campo de input vacío para el nombre */}
-          <input type="text" id="name-user" className="profile-input" placeholder="Tu nombre" />
+          <h2 className="section-title">Nombre Completo</h2>
+          <input type="text" id="name-user" className="profile-input" placeholder="Tu nombre completo" />
         </div>
 
-        {/* Sección de descripción (vacía) */}
-        <div className="profile-description-section">
-          <h2 className="section-title">Descripción</h2>
-          {/* Textarea vacío para la descripción */}
-          <textarea
-            id="description"
-            className="profile-textarea"
-            rows={4}
-            placeholder="Cuéntanos un poco sobre ti y por qué quieres adoptar..."
-          ></textarea>
-        </div>
-
-        {/* Sección de contacto (vacía) */}
+        {/* Sección de contacto (vacía), similar a la sección de contacto del refugio */}
         <div className="profile-contact-section">
           <h2 className="section-title">Contacto</h2>
-          {/* Campos de input vacíos */}
           <div className="input-group">
             <label htmlFor="email" className="input-label">Email:</label>
             <input type="email" id="email" className="profile-input" placeholder="tu.email@ejemplo.com" />
@@ -48,26 +36,41 @@ export default function AdoptanteProfilePage() {
           </div>
         </div>
 
+        {/* Sección de descripción (vacía) */}
+        <div className="profile-description-section">
+          <h2 className="section-title">Descripción Personal</h2>
+          <textarea
+            id="description"
+            className="profile-textarea"
+            rows={4}
+            placeholder="Cuéntanos un poco sobre ti y por qué quieres adoptar..."
+          ></textarea>
+        </div>
+
+        {/* Sección de datos personales (vacía), similar a la dirección del refugio */}
+        <div className="profile-personal-data-section">
+          <h2 className="section-title">Datos Personales</h2>
+          <div className="input-group">
+            <label htmlFor="address" className="input-label">Dirección:</label>
+            <input type="text" id="address" className="profile-input" placeholder="Tu dirección completa" />
+          </div>
+          {/* Puedes añadir más campos personales aquí, por ejemplo:
+          <div className="input-group">
+            <label htmlFor="age" className="input-label">Edad:</label>
+            <input type="number" id="age" className="profile-input" placeholder="Tu edad" />
+          </div>
+          */}
+        </div>
+
         {/* Sección de información adicional (vacía) */}
         <div className="profile-additional-info-section">
           <h2 className="section-title">Información Adicional</h2>
-          {/* Textarea vacío */}
           <textarea
             id="additional-info"
             className="profile-textarea"
             rows={4}
             placeholder="Alguna información extra que quieras compartir (ej. experiencia con mascotas, espacio en casa)."
           ></textarea>
-        </div>
-
-        {/* Sección de datos personales (vacía) */}
-        <div className="profile-personal-data-section">
-          <h2 className="section-title">Datos Personales</h2>
-          {/* Campos de input vacíos */}
-          <div className="input-group">
-            <label htmlFor="address" className="input-label">Dirección:</label>
-            <input type="text" id="address" className="profile-input" placeholder="Tu dirección" />
-          </div>
         </div>
       </div>
 

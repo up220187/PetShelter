@@ -1,662 +1,664 @@
  @import "tailwindcss";
 
-body {
-  background-color: #FF8442;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh; 
-  font-family: Arial, sans-serif; 
-  position: relative; 
-  overflow: hidden; 
-}
-
-/* --- Estilos para el contenedor de la imagen de huellas como FONDO GLOBAL --- */
-.global-paws-background {
-  position: absolute;
-  top: 0;
-  left: 900px;
-  width: 33%;
-  height: 100%;
-  background-image: url('/paws.png'); 
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  opacity: 1; 
-  z-index: 0; 
-  pointer-events: none; 
-}
-
-/* --- Estilos para el contenedor del contenido principal --- */
-.main-content-wrapper {
-  z-index: 10; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;  
-  justify-content: center; 
-  width: 100%; 
-  min-height: 100vh; 
-}
-
-/* --- Estilos para el logo --- */
-
-.logo-container img {
-  width: 320px; 
-  height: auto;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* --- Estilos para el contenedor del formulario  --- */
-.form-box {
-  background-color: white;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 448px; 
-}
-
-/* --- Estilos internos del formulario --- */
-.form-content-wrapper {
-  flex-direction: column;
-  align-items: center; 
-}
-
-.form-title {
-  font-size: 30px;
-  font-weight: bold;
-  color: #374151;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
-.form-subtitle {
-  color: #4b5563;
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.form-field {
-  margin-bottom: 16px;
-  width: 100%;
-}
-
-.form-field:last-of-type {
-  margin-bottom: 24px;
-}
-
-.form-label {
-  display: block;
-  color: #374151;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.form-input {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  appearance: none;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  width: 100%;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 42px;
-  padding-right: 16px;
-  color: #374151;
-  line-height: 1.25;
-  outline: none;
-}
-
-.form-input:focus {
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-}
-
-/* --- Estilos para el botón de registrar --- */
-.register-button-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 24px;
-  width: 100%; 
-}
-
-.register-button {
-  background-color: #F97316; 
-  color: white;
-  font-weight: bold;
-  padding: 12px 32px; 
-  border-radius: 9999px; 
-  border: none;
-  cursor: pointer;
-  font-size: 18px; 
-  transition-property: background-color;
-  transition-duration: 300ms;
-  transition-timing-function: ease-in-out;
-  outline: none;
-  display: inline-block; 
-  margin-left: 11%;
-}
-
-.register-button:hover {
-  background-color: #EA580C;
-}
-
-.register-button:focus {
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-}
-
-/* --- Estilos para inicia sesión --- */
-.login-link-wrapper {
-  margin-top: 20px; 
-  text-align: center;
-  width: 100%;
-}
-
-.login-link-text {
-  color: #4b5563;
-  font-size: 14px; 
-}
-
-.login-link-text a {
-  color: #F97316; 
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.login-link-text a:hover {
-  text-decoration: underline;
-}
-
-
-
-/* dasboard */
-.paws-bg {
-  position: absolute;
-  top: -146px;
-  left: -40px;
-  width: 30%;
-  height: auto;
-  opacity: 1;
-  z-index: 0;
-}
-
-.paws2-right {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
-  width: 15%;
-  height: auto;
-  opacity: 1;
-  z-index: 0;
-}
-
-
-.logo-wrapper {
-  margin-bottom: 40px;
-  z-index: 1;
-}
-
-.main-logo {
-  width: 350px;
-  height: auto;
-}
-
-.buttons-wrapper {
-  display: flex;
-  gap: 20px;
-  z-index: 1;
-  margin-bottom: 40px;
-}
-
-.login-btn,
-.register-btn {
-  background-color: #E5D585;
-  color: #000;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-.login-btn:hover,
-.register-btn:hover {
-  transform: scale(1.05);
-}
-
-.main-footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 12px;
-  color: #fff;
-  background-color: #f97316;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-  font-family: sans-serif;
-}
-
-/* Sección del logo y botones */
-.home-container {
-  background-color: #FF8442;
-  padding: 4rem 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-/* Sección de características */
-.features-section {
-  background-color: #fff;
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.features-section h2 {
-  font-size: 2rem;
-  color: #f97316;
-  margin-bottom: 2rem;
-}
-
-.features-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.feature-card {
-  background: #fff7ed;
-  padding: 1.5rem;
-  border-radius: 12px;
-  width: 220px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.feature-card h3 {
-  margin-top: 1rem;
-  font-size: 1.1rem;
-  color: #f97316;
-}
-
-.feature-card p {
-  font-size: 0.9rem;
-  color: #444;
-}
-
-
-
-
-
-/* adoptantes */
-
-.adoptante-layout-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #f0f0f0; 
-}
-
-.adoptante-header {
-  background-color: #FF8442; 
-  padding: 15px 30px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.logo-section img {
-  width: 100px;
-}
-
-.search-and-nav-section {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row-reverse;
-  gap: 15px;
-}
-
-.search-bar-wrapper {
-  background-color: #fff;
-  border-radius: 25px;
-  padding: 8px 15px;
-  display: flex;
-  align-items: center;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-  max-width: 600px; 
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.search-input {
-  border: none;
-  outline: none;
-  flex-grow: 1;
-  padding: 5px;
-  font-size: 16px;
-}
-
-.search-icon, .filter-icon {
-  color: #f97316; 
-  margin-left: 10px;
-  cursor: pointer;
-}
-
-.adoptante-nav {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.nav-button {
-  background-color: #E5D585;
-  color: #000;
-  padding: 10px 20px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: background-color 0.3s ease;
-}
-
-.nav-button:hover {
-  background-color: #d8c772;
-}
-
-.adoptante-main-content {
-  flex-grow: 1;
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.dashboard-content {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  display: flex;
-  gap: 40px;
-  max-width: 900px; 
-  width: 100%;
-}
-
-.placeholder-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 300px;
-  height: 400px; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f8f8f8;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.placeholder-text {
-  color: #999;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.details-section {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-.detail-line {
-  background-color: #e0e0e0;
-  height: 20px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  width: 80%;
-}
-
-.detail-line.short {
-  width: 60%;
-}
-
-.adoptante-footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 12px;
-  color: #fff;
-  background-color: #f97316; 
-}
-
-.left-content {
-    flex: 2; 
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  position: relative;
-  overflow: hidden;
-  background-color: transparent;
-  margin-left: 20px;
-}
-
-.adopta-perro-image {
-  border-radius: 8px;
-}
-
-.right-content {
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 30px;
-}
-
-.background-dog-image {
-  z-index: 0; 
-  opacity: 0.2; 
-}
-
-.text-overlay {
-  position: relative; 
-  z-index: 1; 
-  color: #333;
-  font-size: 1.2rem;
-  line-height: 1.6;
-}
-
-.text-overlay p {
-  margin-bottom: 15px;
-}
-
-.text-overlay .agenda-text {
-  font-size: 1.1rem; 
-}
-
-.text-overlay .mission-text {
-  font-weight: bold;
-  color: #f97316;
-  font-size: 1.3rem;
-  margin-top: 30px; 
-}
-
-/* --- Estilos para el Dashboard del Adoptante (dashboard/customer/page.tsx) --- */
-
-.shelter-layout-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #FF8442; 
-}
-
-.shelter-header {
-  background-color: #f97316; 
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border-bottom: 2px solid #E5D585; 
-}
-
-.shelter-header .logo-section {
-  display: flex;
-  align-items: center;
-}
-
-.shelter-header .logo-section img {
-    height: 80px; 
-    width: auto;
-}
-
-
-.shelter-nav {
-  display: flex;
-  gap: 15px; 
-}
-
-.shelter-nav .nav-button {
-  background-color: #E5D585; 
-  color: #000;
-  padding: 10px 20px;
-  border-radius: 25px; 
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.shelter-nav .nav-button:hover {
-  background-color: #f97316;
-  color: #fff;
-  transform: translateY(-2px); 
-}
-
-.shelter-main-content {
-  flex-grow: 1;
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f0f0f0;
-}
-
-.shelter-footer {
-  text-align: center;
-  padding: 1rem;
-  font-size: 12px;
-  color: #fff;
-  background-color: #f97316;
-  margin-top: auto;
-}
-
-
-.shelter-dashboard-content {
-  background-color: white; 
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  max-width: 1200px; 
-  width: 95%;
-  height: 400px; 
-  margin: 20px auto; 
-  display: flex; 
-  position: relative;
-  overflow: hidden;
-}
-
-.shelter-left-content {
-  flex: 3; 
-  position: relative; 
-  overflow: hidden; 
-  padding: 30px; 
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: flex-start; 
-}
-
-.shelter-left-background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.15;
-  z-index: 1;
-}
-
-.shelter-text-overlay {
-  position: relative; 
-  z-index: 2; 
-  padding: 20px; 
-  border-radius: 8px; 
-  text-align: left;
-  width: 100%; 
-}
-
-.shelter-text-overlay p {
-  font-size: 1.1rem;
-  color: #333;
-  line-height: 1.6;
-  margin-bottom: 15px;
-}
-
-.shelter-text-overlay p:last-child {
-  margin-bottom: 0;
-}
-
-.shelter-mission-text {
-  font-weight: bold;
-  color: #f97316;
-  margin-top: 20px;
-}
-
-.shelter-right-content {
-  flex: 2; 
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  position: relative;
-  overflow: hidden;
-  background-color: transparent;
-}
-
-.shelter-right-dog-image {
-  border-radius: 8px; 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-  z-index: 1; 
-}
-
-
-
-/* --- Estilos Específicos para la Página de Administrar Perfil del Adoptante --- */
+ body {
+   background-color: #FF8442;
+   margin: 0;
+   padding: 0;
+   min-height: 100vh;
+   font-family: Arial, sans-serif;
+   position: relative;
+   overflow: hidden;
+ }
+
+ /* --- Estilos para el contenedor de la imagen de huellas como FONDO GLOBAL --- */
+ .global-paws-background {
+   position: absolute;
+   top: 0;
+   left: 900px;
+   width: 33%;
+   height: 100%;
+   background-image: url('/paws.png');
+   background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
+   opacity: 1;
+   z-index: 0;
+   pointer-events: none;
+ }
+
+ /* --- Estilos para el contenedor del contenido principal --- */
+ .main-content-wrapper {
+   z-index: 10;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   width: 100%;
+   min-height: 100vh;
+ }
+
+ /* --- Estilos para el logo --- */
+
+ .logo-container img {
+   width: 320px;
+   height: auto;
+   display: block;
+   margin-left: auto;
+   margin-right: auto;
+ }
+
+ /* --- Estilos para el contenedor del formulario  --- */
+ .form-box {
+   background-color: white;
+   padding: 32px;
+   border-radius: 12px;
+   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+   width: 100%;
+   max-width: 448px;
+ }
+
+ /* --- Estilos internos del formulario --- */
+ .form-content-wrapper {
+   flex-direction: column;
+   align-items: center;
+ }
+
+ .form-title {
+   font-size: 30px;
+   font-weight: bold;
+   color: #374151;
+   margin-bottom: 8px;
+   text-align: center;
+ }
+
+ .form-subtitle {
+   color: #4b5563;
+   margin-bottom: 24px;
+   text-align: center;
+ }
+
+ .form-field {
+   margin-bottom: 16px;
+   width: 100%;
+ }
+
+ .form-field:last-of-type {
+   margin-bottom: 24px;
+ }
+
+ .form-label {
+   display: block;
+   color: #374151;
+   font-size: 14px;
+   font-weight: bold;
+   margin-bottom: 8px;
+ }
+
+ .form-input {
+   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+   appearance: none;
+   border: 1px solid #e5e7eb;
+   border-radius: 8px;
+   width: 100%;
+   padding-top: 12px;
+   padding-bottom: 12px;
+   padding-left: 42px;
+   padding-right: 16px;
+   color: #374151;
+   line-height: 1.25;
+   outline: none;
+ }
+
+ .form-input:focus {
+   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+ }
+
+ /* --- Estilos para el botón de registrar --- */
+ .register-button-wrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   margin-top: 24px;
+   width: 100%;
+ }
+
+ .register-button {
+   background-color: #F97316;
+   color: white;
+   font-weight: bold;
+   padding: 12px 32px;
+   border-radius: 9999px;
+   border: none;
+   cursor: pointer;
+   font-size: 18px;
+   transition-property: background-color;
+   transition-duration: 300ms;
+   transition-timing-function: ease-in-out;
+   outline: none;
+   display: inline-block;
+   margin-left: 11%;
+ }
+
+ .register-button:hover {
+   background-color: #EA580C;
+ }
+
+ .register-button:focus {
+   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+ }
+
+ /* --- Estilos para inicia sesión --- */
+ .login-link-wrapper {
+   margin-top: 20px;
+   text-align: center;
+   width: 100%;
+ }
+
+ .login-link-text {
+   color: #4b5563;
+   font-size: 14px;
+ }
+
+ .login-link-text a {
+   color: #F97316;
+   font-weight: 600;
+   text-decoration: none;
+ }
+
+ .login-link-text a:hover {
+   text-decoration: underline;
+ }
+
+
+
+ /* dasboard */
+ .paws-bg {
+   position: absolute;
+   top: -146px;
+   left: -40px;
+   width: 30%;
+   height: auto;
+   opacity: 1;
+   z-index: 0;
+ }
+
+ .paws2-right {
+   position: absolute;
+   bottom: 80px;
+   right: 0;
+   width: 15%;
+   height: auto;
+   opacity: 1;
+   z-index: 0;
+ }
+
+
+ .logo-wrapper {
+   margin-bottom: 40px;
+   z-index: 1;
+ }
+
+ .main-logo {
+   width: 350px;
+   height: auto;
+ }
+
+ .buttons-wrapper {
+   display: flex;
+   gap: 20px;
+   z-index: 1;
+   margin-bottom: 40px;
+ }
+
+ .login-btn,
+ .register-btn {
+   background-color: #E5D585;
+   color: #000;
+   padding: 12px 24px;
+   border-radius: 8px;
+   text-decoration: none;
+   font-weight: 500;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+   transition: transform 0.2s ease;
+ }
+
+ .login-btn:hover,
+ .register-btn:hover {
+   transform: scale(1.05);
+ }
+
+ .main-footer {
+   text-align: center;
+   padding: 1rem;
+   font-size: 12px;
+   color: #fff;
+   background-color: #f97316;
+ }
+
+ html,
+ body {
+   margin: 0;
+   padding: 0;
+   min-height: 100vh;
+   overflow-x: hidden;
+   overflow-y: auto;
+   font-family: sans-serif;
+ }
+
+ /* Sección del logo y botones */
+ .home-container {
+   background-color: #FF8442;
+   padding: 4rem 1rem 2rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   position: relative;
+ }
+
+ /* Sección de características */
+ .features-section {
+   background-color: #fff;
+   padding: 4rem 2rem;
+   text-align: center;
+ }
+
+ .features-section h2 {
+   font-size: 2rem;
+   color: #f97316;
+   margin-bottom: 2rem;
+ }
+
+ .features-row {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: 2rem;
+ }
+
+ .feature-card {
+   background: #fff7ed;
+   padding: 1.5rem;
+   border-radius: 12px;
+   width: 220px;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
+
+ .feature-card h3 {
+   margin-top: 1rem;
+   font-size: 1.1rem;
+   color: #f97316;
+ }
+
+ .feature-card p {
+   font-size: 0.9rem;
+   color: #444;
+ }
+
+
+
+
+
+ /* adoptantes */
+
+ .adoptante-layout-container {
+   display: flex;
+   flex-direction: column;
+   min-height: 100vh;
+   background-color: #f0f0f0;
+ }
+
+ .adoptante-header {
+   background-color: #FF8442;
+   padding: 15px 30px;
+   display: flex;
+   align-items: center;
+   gap: 20px;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ }
+
+ .logo-section img {
+   width: 100px;
+ }
+
+ .search-and-nav-section {
+   flex-grow: 1;
+   display: flex;
+   flex-direction: row-reverse;
+   gap: 15px;
+ }
+
+ .search-bar-wrapper {
+   background-color: #fff;
+   border-radius: 25px;
+   padding: 8px 15px;
+   display: flex;
+   align-items: center;
+   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+   max-width: 600px;
+   margin-left: auto;
+   margin-right: auto;
+ }
+
+ .search-input {
+   border: none;
+   outline: none;
+   flex-grow: 1;
+   padding: 5px;
+   font-size: 16px;
+ }
+
+ .search-icon,
+ .filter-icon {
+   color: #f97316;
+   margin-left: 10px;
+   cursor: pointer;
+ }
+
+ .adoptante-nav {
+   display: flex;
+   justify-content: center;
+   gap: 15px;
+ }
+
+ .nav-button {
+   background-color: #E5D585;
+   color: #000;
+   padding: 10px 20px;
+   border-radius: 20px;
+   text-decoration: none;
+   font-weight: 500;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   transition: background-color 0.3s ease;
+ }
+
+ .nav-button:hover {
+   background-color: #d8c772;
+ }
+
+ .adoptante-main-content {
+   flex-grow: 1;
+   padding: 30px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .dashboard-content {
+   background-color: #fff;
+   border-radius: 12px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   padding: 30px;
+   display: flex;
+   gap: 40px;
+   max-width: 900px;
+   width: 100%;
+ }
+
+ .placeholder-card {
+   border: 1px solid #ccc;
+   border-radius: 8px;
+   width: 300px;
+   height: 400px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: #f8f8f8;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+ }
+
+ .placeholder-text {
+   color: #999;
+   font-size: 24px;
+   font-weight: bold;
+ }
+
+ .details-section {
+   flex-grow: 1;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+ }
+
+ .detail-line {
+   background-color: #e0e0e0;
+   height: 20px;
+   border-radius: 4px;
+   margin-bottom: 20px;
+   width: 80%;
+ }
+
+ .detail-line.short {
+   width: 60%;
+ }
+
+ .adoptante-footer {
+   text-align: center;
+   padding: 1rem;
+   font-size: 12px;
+   color: #fff;
+   background-color: #f97316;
+ }
+
+ .left-content {
+   flex: 2;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   overflow: hidden;
+   background-color: transparent;
+   margin-left: 20px;
+ }
+
+ .adopta-perro-image {
+   border-radius: 8px;
+ }
+
+ .right-content {
+
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   padding: 30px;
+ }
+
+ .background-dog-image {
+   z-index: 0;
+   opacity: 0.2;
+ }
+
+ .text-overlay {
+   position: relative;
+   z-index: 1;
+   color: #333;
+   font-size: 1.2rem;
+   line-height: 1.6;
+ }
+
+ .text-overlay p {
+   margin-bottom: 15px;
+ }
+
+ .text-overlay .agenda-text {
+   font-size: 1.1rem;
+ }
+
+ .text-overlay .mission-text {
+   font-weight: bold;
+   color: #f97316;
+   font-size: 1.3rem;
+   margin-top: 30px;
+ }
+
+ /* --- Estilos para el Dashboard del Adoptante (dashboard/customer/page.tsx) --- */
+
+ .shelter-layout-container {
+   display: flex;
+   flex-direction: column;
+   min-height: 100vh;
+   background-color: #FF8442;
+ }
+
+ .shelter-header {
+   background-color: #FF8442;
+   padding: 15px 30px;
+   display: flex;
+   align-items: center;
+   gap: 20px;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+ }
+
+ .shelter-header .logo-section {
+   display: flex;
+   align-items: center;
+ }
+
+ .shelter-header .logo-section img {
+   height: 80px;
+   width: auto;
+ }
+
+
+ .shelter-nav {
+   display: flex;
+   gap: 15px;
+ }
+
+ .shelter-nav .nav-button {
+   background-color: #E5D585;
+   color: #000;
+   padding: 10px 20px;
+   border-radius: 25px;
+   text-decoration: none;
+   font-weight: 600;
+   transition: background-color 0.2s ease, transform 0.2s ease;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ }
+
+ .shelter-nav .nav-button:hover {
+   background-color: #f97316;
+   color: #fff;
+   transform: translateY(-2px);
+ }
+
+ .shelter-main-content {
+   flex-grow: 1;
+   padding: 30px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background-color: #f0f0f0;
+ }
+
+ .shelter-footer {
+   text-align: center;
+   padding: 1rem;
+   font-size: 12px;
+   color: #fff;
+   background-color: #f97316;
+   margin-top: auto;
+ }
+
+
+ .shelter-dashboard-content {
+   background-color: white;
+   border-radius: 12px;
+   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+   max-width: 1200px;
+   width: 95%;
+   height: 400px;
+   margin: 20px auto;
+   display: flex;
+   position: relative;
+   overflow: hidden;
+ }
+
+ .shelter-left-content {
+   flex: 3;
+   position: relative;
+   overflow: hidden;
+   padding: 30px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: flex-start;
+ }
+
+ .shelter-left-background-image {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   opacity: 0.15;
+   z-index: 1;
+ }
+
+ .shelter-text-overlay {
+   position: relative;
+   z-index: 2;
+   padding: 20px;
+   border-radius: 8px;
+   text-align: left;
+   width: 100%;
+ }
+
+ .shelter-text-overlay p {
+   font-size: 1.1rem;
+   color: #333;
+   line-height: 1.6;
+   margin-bottom: 15px;
+ }
+
+ .shelter-text-overlay p:last-child {
+   margin-bottom: 0;
+ }
+
+ .shelter-mission-text {
+   font-weight: bold;
+   color: #f97316;
+   margin-top: 20px;
+ }
+
+ .shelter-right-content {
+   flex: 2;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+   overflow: hidden;
+   background-color: transparent;
+ }
+
+ .shelter-right-dog-image {
+   border-radius: 8px;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+   z-index: 1;
+ }
+
+
+
+ /* --- Estilos Específicos para la Página de Administrar Perfil del Adoptante --- */
 .profile-management-container {
   background-color: white;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  max-width: 1000px; /* Ajusta el ancho según necesites */
+  max-width: 1000px; 
   width: 95%;
   padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Espacio entre las secciones principales */
-  margin: 20px auto; /* Centra el contenedor en la página */
+  gap: 20px;
+  margin: 20px auto;
 }
 
 .profile-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #f97316; /* Naranja fuerte */
+  color: #f97316;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -664,56 +666,66 @@ html, body {
 .profile-grid {
   display: grid;
   grid-template-areas:
-    "image-area name-area"
-    "image-area description-area"
-    "image-area contact-area"
-    "image-area personal-area"
-    "image-area additional-area";
-  grid-template-columns: 1fr 2fr; /* Una columna para la imagen, dos para el resto */
-  grid-template-rows: auto auto auto auto auto; /* Filas automáticas para las secciones */
-  gap: 20px; /* Espacio entre los elementos de la cuadrícula */
+    "picture-area name-area description-area"
+    "contact-area personal-area additional-area";
+  grid-template-columns: 1fr 1fr 1fr; 
+  grid-template-rows: auto auto; 
+  gap: 20px;
 }
 
 .profile-image-section {
-  grid-area: image-area; /* Asigna el área de la imagen */
+  grid-area: picture-area; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Alinea la imagen arriba */
-  padding-right: 20px; /* Espacio a la derecha de la imagen */
-  border-right: 1px solid #eee; /* Separador visual */
-}
-
-/* Estilos para el div que representa el espacio de la foto de perfil vacía */
-.profile-picture-empty {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%; /* Hacerlo circular */
-  background-color: #f0f0f0; /* Un color de fondo gris claro para el espacio */
-  border: 3px solid #E5D585; /* Borde amarillo alrededor */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  margin-bottom: 15px;
-  display: flex; /* Para centrar un posible icono o texto dentro si se desea */
-  align-items: center;
-  justify-content: center;
-  color: #aaa; /* Color para un posible icono o texto */
-  font-size: 3rem; /* Tamaño grande para un icono */
-  /* Puedes añadir un icono de usuario SVG o Font Awesome aquí dentro del HTML si quieres */
-}
-
-
-/* Nuevas secciones de la cuadrícula (ajustadas para inputs/textareas) */
-.profile-name-section {
-  grid-area: name-area;
-  background-color: #fff; /* Blanco */
-  padding: 20px;
+  justify-content: flex-start;
+  padding: 10px; 
+  background-color: #fef3c7; 
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.profile-description-section {
-  grid-area: description-area;
-  background-color: #fff; /* Blanco */
+.profile-picture-empty {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #f0f0f0; 
+  border: 3px solid #E5D585;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.2;
+}
+.profile-picture-empty::before {
+  content: "Tu Foto";
+}
+
+.file-upload-input {
+  display: none;
+}
+
+.file-upload-label {
+  background-color: #E5D585;
+  color: #261C14;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.file-upload-label:hover {
+  background-color: #fcd34d;
+}
+
+.profile-name-section {
+  grid-area: name-area;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -721,7 +733,15 @@ html, body {
 
 .profile-contact-section {
   grid-area: contact-area;
-  background-color: #fef3c7; /* Un fondo amarillo muy claro */
+  background-color: #fef3c7;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-description-section {
+  grid-area: description-area;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -737,19 +757,18 @@ html, body {
 
 .profile-additional-info-section {
   grid-area: additional-area;
-  background-color: #fef3c7; /* Un fondo amarillo muy claro */
+  background-color: #fef3c7;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-
 
 .section-title {
   font-size: 1.25rem;
   font-weight: bold;
   color: #333;
   margin-bottom: 15px;
-  border-bottom: 2px solid #E5D585; /* Línea de separación debajo del título */
+  border-bottom: 2px solid #E5D585;
   padding-bottom: 5px;
 }
 
@@ -773,7 +792,7 @@ html, body {
   border-radius: 5px;
   font-size: 1rem;
   color: #333;
-  box-sizing: border-box; /* Incluye padding y borde en el width/height */
+  box-sizing: border-box;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -785,13 +804,13 @@ html, body {
 }
 
 .profile-textarea {
-  resize: vertical; /* Permite redimensionar verticalmente */
-  min-height: 80px; /* Altura mínima para el textarea */
+  resize: vertical;
+  min-height: 80px;
 }
 
 .profile-actions {
   display: flex;
-  justify-content: flex-end; /* Alinea los botones a la derecha */
+  justify-content: flex-end;
   gap: 15px;
   margin-top: 30px;
 }
@@ -808,7 +827,7 @@ html, body {
 }
 
 .save-button {
-  background-color: #f97316; /* Naranja fuerte */
+  background-color: #f97316;
   color: white;
 }
 
@@ -827,12 +846,11 @@ html, body {
   transform: translateY(-2px);
 }
 
-/* Media Queries para responsividad */
 @media (max-width: 768px) {
   .profile-grid {
-    grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
+    grid-template-columns: 1fr; 
     grid-template-areas:
-      "image-area"
+      "picture-area"
       "name-area"
       "contact-area"
       "description-area"
@@ -841,7 +859,213 @@ html, body {
   }
 
   .profile-image-section {
-    border-right: none; 
+    border-right: none;
+    padding-right: 0;
+  }
+}
+
+ /* --- Estilos para la Página de Registrar Refugio --- */
+.create-shelter-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  width: 95%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px auto;
+}
+
+.shelter-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #f97316; 
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.shelter-grid {
+  display: grid;
+  grid-template-areas:
+    "picture-area description-area"
+    "contact-area address-area"
+    "contact-area additional-area"; 
+  grid-template-columns: 1fr 2fr; 
+  grid-template-rows: auto auto auto; 
+  gap: 20px;
+}
+
+.shelter-logo-section {
+  grid-area: picture-area; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px; 
+  background-color: #fef3c7;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.shelter-picture-empty {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%; 
+  background-color: #f0f0f0; 
+  border: 3px solid #E5D585;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 1rem;
+  text-align: center;
+  line-height: 1.2;
+}
+.shelter-picture-empty::before {
+  content: "Foto de Refugio";
+}
+
+.file-upload-input {
+  display: none; 
+}
+
+.file-upload-label {
+  background-color: #E5D585; 
+  color: #261C14;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.file-upload-label:hover {
+  background-color: #fcd34d; 
+}
+
+.shelter-description-section {
+  grid-area: description-area;
+  background-color: #fff; 
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.shelter-address-section { 
+  grid-area: address-area;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.shelter-contact-section { 
+  grid-area: contact-area;
+  background-color: #fef3c7; 
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.shelter-additional-info-section {
+  grid-area: additional-area;
+  background-color: #fff; 
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #E5D585;
+  padding-bottom: 5px;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.profile-input,
+.profile-textarea { 
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-input:focus,
+.profile-textarea:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  outline: none;
+}
+
+.profile-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.shelter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.save-button, 
+.cancel-button-link .cancel-button { 
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  border: none;
+  text-decoration: none; 
+}
+
+.save-button {
+  background-color: #f97316;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #EA580C;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .shelter-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "picture-area"
+      "description-area"
+      "address-area"
+      "contact-area"
+      "additional-area"; 
+  }
+
+  .shelter-logo-section {
+    border-right: none;
     padding-right: 0;
   }
 }
