@@ -56,7 +56,7 @@ exports.obtenerVisitas = async (req, res) => {
       .populate('visIdUsuario')
       .populate('visIdMascota')
       .populate('visIdRefugio');
-    res.json(visitas);
+    res.json(visitas);borrarVisita
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener visitas' });
   }

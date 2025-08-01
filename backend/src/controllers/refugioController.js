@@ -137,9 +137,9 @@ exports.borrarRefugio = async (req, res) => {
 };
 /**
  * @swagger
- * /refugios/{id}:
- *   patch:
- *     summary: Actualizar parcialmente un refugio existente
+ * /seguimientos/{id}:
+ *   put:
+ *     summary: Actualizar un refugio por ID
  *     tags: [Refugios]
  *     parameters:
  *       - in: path
@@ -147,7 +147,7 @@ exports.borrarRefugio = async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del refugio a actualizar parcialmente
+ *         description: ID del refugio a actualizar
  *     requestBody:
  *       required: true
  *       content:
@@ -156,15 +156,15 @@ exports.borrarRefugio = async (req, res) => {
  *             $ref: '#/components/schemas/Refugio'
  *     responses:
  *       200:
- *         description: Refugio actualizado parcialmente exitosamente
+ *         description: Refugio actualizado exitosamente
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Refugio'
  *       400:
- *         description: Error en la solicitud
+ *         description: Error en la solicitud de actualización
  *       404:
- *         description: Refugio no encontrado
+ *         description: Refugio no encontrado al actualizar el refugio
  */
 exports.actualizarRefugio = async (req, res) => {
   try {
