@@ -5,4 +5,5 @@ const tipoMascotaController = require('../controllers/tipoMascotaController');
 router.post('/', tipoMascotaController.crearTipoMascota);
 router.get('/', tipoMascotaController.obtenerTiposMascota);
 
+
 module.exports = router;

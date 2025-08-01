@@ -58,3 +58,123 @@ exports.obtenerRefugios = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener refugios' });
   }
 };
+
+/**
+ * @swagger
+ * /refugios/{id}:
+ *   put:
+ *     summary: Actualizar un refugio existente
+ *     tags: [Refugios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del refugio a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Refugio'
+ *     responses:
+ *       200:
+ *         description: Refugio actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Refugio'
+ *       400:
+ *         description: Error en la solicitud
+ *       404:
+ *         description: Refugio no encontrado
+ */
+exports.actualizarRefugio = async (req, res) => {
+  try {
+    const refugio = await Refugio.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!refugio) {
+      return res.status(404).json({ error: 'Refugio no encontrado' });
+    }
+    res.json(refugio);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/**
+ * @swagger
+ * /refugios/{id}:
+ *   delete:
+ *     summary: Borrar un refugio existente
+ *     tags: [Refugios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del refugio a borrar
+ *     responses:
+ *       200:
+ *         description: Refugio borrado exitosamente
+ *       404:
+ *         description: Refugio no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
+exports.borrarRefugio = async (req, res) => {
+  try {
+    const refugio = await Refugio.findByIdAndDelete(req.params.id);
+    if (!refugio) {
+      return res.status(404).json({ error: 'Refugio no encontrado' });
+    }
+    res.json({ message: 'Refugio borrado exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+
+  }
+};
+/**
+ * @swagger
+ * /refugios/{id}:
+ *   patch:
+ *     summary: Actualizar parcialmente un refugio existente
+ *     tags: [Refugios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del refugio a actualizar parcialmente
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Refugio'
+ *     responses:
+ *       200:
+ *         description: Refugio actualizado parcialmente exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Refugio'
+ *       400:
+ *         description: Error en la solicitud
+ *       404:
+ *         description: Refugio no encontrado
+ */
+exports.actualizarRefugio = async (req, res) => {
+  try {
+    const refugio = await Refugio.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!refugio) {
+      return res.status(404).json({ error: 'Refugio no encontrado' });
+    }
+    res.json(refugio);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+

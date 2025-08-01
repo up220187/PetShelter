@@ -60,6 +60,44 @@ exports.obtenerSolicitudes = async (req, res) => {
 /**
  * @swagger
  * /solicitudes/{id}:
+ *   get:
+ *     summary: Obtener una solicitud de adopción por ID
+ *     tags: [SolicitudesAdopcion]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Solicitud encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SolicitudAdopcion'
+ *       404:
+ *         description: Solicitud no encontrada
+ *       500:
+ *         description: Error del servidor
+ */
+exports.obtenerSolicitudPorId = async (req, res) => {
+  try {
+    const solicitud = await SolicitudAdopcion.findById(req.params.id)
+      .populate('solIdUsuario')
+      .populate('solIdMascota');
+    if (!solicitud) {
+      return res.status(404).json({ error: 'Solicitud no encontrada' });
+    }
+    res.json(solicitud);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener la solicitud' });
+  }
+};
+
+/**
+ * @swagger
+ * /solicitudes/{id}:
  *   put:
  *     summary: Actualizar una solicitud de adopción por ID
  *     tags: [SolicitudesAdopcion]
@@ -93,3 +131,35 @@ exports.actualizarSolicitud = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+/** * @swagger
+ * /solicitudes/{id}:
+ *   delete:
+ *     summary: Eliminar una solicitud de adopción por ID
+ *     tags: [SolicitudesAdopcion]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Solicitud eliminada
+ *       404:
+ *         description: Solicitud no encontrada
+ *       500:
+ *         description: Error del servidor
+ */   
+
+exports.borrarSolicitud = async (req, res) => {
+  try {
+    const solicitud = await SolicitudAdopcion.findByIdAndDelete(req.params.id);
+    if (!solicitud) {
+      return res.status(404).json({ error: 'Solicitud no encontrada' });
+    }
+    res.json({ message: 'Solicitud eliminada exitosamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar solicitud' });
+  }
+};  

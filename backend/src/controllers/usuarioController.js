@@ -80,6 +80,46 @@ exports.obtenerUsuarios = async (req, res) => {
 
 /**
  * @swagger
+ * /usuarios/{id}:
+ *   get:
+ *     summary: Obtener un usuario por ID
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario a obtener
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado (sin contraseña)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Usuario'
+ *       404:
+ *         description: Usuario no encontrado
+ *       400:
+ *         description: Error en la petición
+ */
+exports.obtenerUsuarioPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findById(id).populate('usuEstado');
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    const usuarioSinPassword = usuario.toObject();
+    delete usuarioSinPassword.usuContraseña;
+    res.json(usuarioSinPassword);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/**
+ * @swagger
  * /usuarios/login:
  *   post:
  *     summary: Iniciar sesión de usuario
@@ -124,6 +164,92 @@ exports.loginUsuario = async (req, res) => {
     delete usuarioSinPassword.usuContraseña;
     
     res.json(usuarioSinPassword);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/**
+ * @swagger
+ * /usuarios/{id}:
+ *   put:
+ *     summary: Actualizar un usuario existente
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Usuario'
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *       400:
+ *         description: Error en los datos proporcionados
+ *       404:
+ *         description: Usuario no encontrado
+ */
+exports.actualizarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let datosActualizados = { ...req.body };
+
+    // Si se actualiza la contraseña, encriptarla
+    if (datosActualizados.usuContraseña) {
+      const salt = await bcrypt.genSalt(10);
+      datosActualizados.usuContraseña = await bcrypt.hash(datosActualizados.usuContraseña, salt);
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(id, datosActualizados, { new: true }).populate('usuEstado');
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    const usuarioSinPassword = usuario.toObject();
+    delete usuarioSinPassword.usuContraseña;
+
+    res.json(usuarioSinPassword);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/**
+ * @swagger
+ * /usuarios/{id}:
+ *   delete:
+ *     summary: Eliminar un usuario existente
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario a eliminar
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       400:
+ *         description: Error en la petición
+ */
+exports.eliminarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findByIdAndDelete(id);
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.json({ mensaje: 'Usuario eliminado exitosamente' });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
