@@ -76,7 +76,6 @@ const UsuarioSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: "Estado", 
         alias: "T_UsuEstado", 
-        required: true 
     },
 
     usuDireccion: { type: String, 
