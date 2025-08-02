@@ -24,6 +24,28 @@ const Visita = require('../models/Visita');
  */
 exports.crearVisita = async (req, res) => {
   try {
+    const { visIdMascota, visFechaVisita, visHoraVisita } = req.body;
+    // Validar que el ID es un ObjectId válido
+    if (!visIdMascota || !visIdMascota.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: 'ID de mascota inválido.' });
+    }
+    const Mascota = require('../models/Mascota');
+    const mascota = await Mascota.findById(visIdMascota);
+    if (!mascota) {
+      return res.status(404).json({ message: 'Mascota no encontrada.' });
+    }
+    if (mascota.masEstado !== 'Disponible') {
+      return res.status(400).json({ message: 'Solo se puede agendar visita si la mascota está disponible.' });
+    }
+    // Validar que no exista otra visita para la misma mascota en la misma fecha y hora
+    const visitaExistente = await Visita.findOne({
+      visIdMascota,
+      visFechaVisita,
+      visHoraVisita
+    });
+    if (visitaExistente) {
+      return res.status(400).json({ message: 'Ya existe una visita agendada para esta mascota en esa fecha y hora.' });
+    }
     const visita = new Visita(req.body);
     await visita.save();
     res.status(201).json(visita);
@@ -95,6 +117,16 @@ exports.obtenerVisitas = async (req, res) => {
  */
 exports.actualizarVisita = async (req, res) => {
   try {
+    // Si el body incluye visIdMascota, validar que sea igual al actual
+    if (req.body.visIdMascota) {
+      const visitaActual = await Visita.findById(req.params.id);
+      if (!visitaActual) {
+        return res.status(404).json({ error: 'Visita no encontrada' });
+      }
+      if (String(req.body.visIdMascota) !== String(visitaActual.visIdMascota)) {
+        return res.status(400).json({ error: 'No se puede modificar la mascota de la visita.' });
+      }
+    }
     const visita = await Visita.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!visita) {
       return res.status(404).json({ error: 'Visita no encontrada' });
