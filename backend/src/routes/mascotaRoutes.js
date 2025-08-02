@@ -14,25 +14,41 @@ router.post(
             .isLength({ max: 50 })
             .withMessage("El nombre es obligatorio"),
         body("masNacimiento")
-            .isInt({ min: 0 })
-            .withMessage("La edad debe ser un número entero positivo"),
+            .notEmpty()
+            .isISO8601().withMessage("La fecha de nacimiento debe estar en formato YYYY-MM-DD"),
         body("masSexo")
             .notEmpty()
+            .isIn(["Macho", "Hembra"])
             .withMessage("El sexo de la mascota es obligatorio"),
         body("masTamaño")
             .notEmpty()
-            .isEnumeration({ values: ["Pequeño", "Mediano", "Grande"] })
+            .isIn(["Pequeño", "Mediano", "Grande"])
             .withMessage("El tamaño de la mascota es obligatorio"),
-        body("estadoId")
-            .isInt()
-            .withMessage("El ID del estado debe ser un número entero"),
+        body("masEstadoSalud")
+            .notEmpty().withMessage("El estado de salud es obligatorio"),
+        body("masComportamiento")
+            .notEmpty()
+            .isIn(["Agresivo", "Asustadizo", "Juguetón", "Tranquilo"])
+            .withMessage("El comportamiento es obligatorio"),
+        body("masEsterilizado")
+            .isBoolean().withMessage("El campo de esterilización debe ser booleano"),
+        body("masEstado")
+            .optional()
+            .isIn(["Disponible", "En Proceso", "Adoptado"]),
+        body("masIdTipoMascota")
+            .notEmpty()
+            .isMongoId().withMessage("El ID del tipo de mascota debe ser un ObjectId válido"),
+        body("masIdRefugio")
+            .notEmpty()
+            .isMongoId().withMessage("El ID del refugio debe ser un ObjectId válido"),
     ],
     validate,
     mascotaController.crearMascota
 );
 
 router.get(
-    "/"[
+    "/",
+    [
     (authMiddleware,
         query("page")
             .optional()
@@ -65,21 +81,38 @@ router.put(
         param("id")
             .isMongoId()
             .withMessage("El ID debe ser un ID de MongoDB válido"),
-        body("nombre")
+        body("masNombre")
             .notEmpty()
+            .isLength({ max: 50 })
             .withMessage("El nombre es obligatorio"),
-        body("edad")
-            .isInt({ min: 0 })
-            .withMessage("La edad debe ser un número entero positivo"),
-        body("tipo")
+        body("masNacimiento")
             .notEmpty()
-            .withMessage("El tipo de mascota es obligatorio"),
-        body("raza")
+            .isISO8601().withMessage("La fecha de nacimiento debe estar en formato YYYY-MM-DD"),
+        body("masSexo")
             .notEmpty()
-            .withMessage("La raza es obligatoria"),
-        body("estadoId")
-            .isInt()
-            .withMessage("El ID del estado debe ser un número entero"),
+            .isIn(["Macho", "Hembra"])
+            .withMessage("El sexo de la mascota es obligatorio"),
+        body("masTamaño")
+            .notEmpty()
+            .isIn(["Pequeño", "Mediano", "Grande"])
+            .withMessage("El tamaño de la mascota es obligatorio"),
+        body("masEstadoSalud")
+            .notEmpty().withMessage("El estado de salud es obligatorio"),
+        body("masComportamiento")
+            .notEmpty()
+            .isIn(["Agresivo", "Asustadizo", "Juguetón", "Tranquilo"])
+            .withMessage("El comportamiento es obligatorio"),
+        body("masEsterilizado")
+            .isBoolean().withMessage("El campo de esterilización debe ser booleano"),
+        body("masEstado")
+            .optional()
+            .isIn(["Disponible", "En Proceso", "Adoptado"]),
+        body("masIdTipoMascota")
+            .notEmpty()
+            .isMongoId().withMessage("El ID del tipo de mascota debe ser un ObjectId válido"),
+        body("masIdRefugio")
+            .notEmpty()
+            .isMongoId().withMessage("El ID del refugio debe ser un ObjectId válido"),
     ],
     validate,
     mascotaController.actualizarMascotaPorId

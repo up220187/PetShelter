@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/', [
     authMiddleware,
-    body('nombre').notEmpty().withMessage('El nombre es obligatorio')
+    body('estDescripcion').notEmpty().withMessage('La descripción es obligatoria')
 ], validate, estadoController.crearEstado);
 
 router.get('/', [

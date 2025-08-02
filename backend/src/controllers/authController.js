@@ -2,6 +2,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const errorHandler = require('../middlewares/databaseErrorHandler');
+
 const User = require('../models/Usuario');
 const RefreshToken = require('../models/RefreshToken');
 const router = express.Router();
@@ -135,7 +137,8 @@ exports.login = async (req, res) => {
             }
         });
     } catch (error) {
-        errorHandler(res, error);
+        console.error(error);
+        res.status(500).json({ message: error.message || 'Error interno del servidor' });
     }
 };
 

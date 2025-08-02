@@ -5,10 +5,9 @@ const authMiddleware = require('../middlewares/authMiddlewares');
 const router = express.Router();
 const tipoMascotaController = require('../controllers/tipoMascotaController');
 
-router.post('/'[
+router.post('/', [
     authMiddleware,
-    body('nombre').notEmpty().withMessage('El nombre es obligatorio'),
-    body('descripcion').optional().isString().withMessage('La descripción debe ser una cadena de texto')
+    body('tiMDescripcion').notEmpty().withMessage('La descripción es obligatoria')
 ], validate, tipoMascotaController.crearTipoMascota);
 
 router.get('/', [

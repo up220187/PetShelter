@@ -2,7 +2,7 @@ const TipoMascota = require('../models/TipoMascota');
 
 /**
  * @swagger
- * /tipos-mascota:
+ * /tiposMascotas:
  *   post:
  *     summary: Crear un nuevo tipo de mascota
  *     tags: [TiposMascota]
@@ -30,7 +30,7 @@ exports.crearTipoMascota = async (req, res) => {
 
 /**
  * @swagger
- * /tipos-mascota:
+ * /tiposMascotas:
  *   get:
  *     summary: Obtener todos los tipos de mascota
  *     tags: [TiposMascota]

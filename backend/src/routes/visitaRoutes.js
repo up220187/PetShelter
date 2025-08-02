@@ -7,9 +7,12 @@ const visitaController = require('../controllers/visitaController');
 
 router.post('/', [
     authMiddleware,
-    body('mascotaId').isMongoId().withMessage('El ID de la mascota debe ser un ID de MongoDB válido'),
-    body('fechaVisita').isISO8601().withMessage('La fecha de visita debe ser una fecha válida'),
-    body('observaciones').notEmpty().withMessage('Las observaciones son obligatorias')
+    body('visIdUsuario').notEmpty().isMongoId().withMessage('El ID de usuario es obligatorio y debe ser un ObjectId válido'),
+    body('visIdMascota').notEmpty().isMongoId().withMessage('El ID de la mascota es obligatorio y debe ser un ObjectId válido'),
+    body('visIdRefugio').notEmpty().isMongoId().withMessage('El ID del refugio es obligatorio y debe ser un ObjectId válido'),
+    body('visFechaVisita').notEmpty().isISO8601().withMessage('La fecha de visita debe ser una fecha válida'),
+    body('visHoraVisita').notEmpty().withMessage('La hora de visita es obligatoria'),
+    body('visEstadoVisita').notEmpty().withMessage('El estado de la visita es obligatorio'),
 ], validate, visitaController.crearVisita);
 
 router.get('/', [
@@ -18,12 +21,15 @@ router.get('/', [
     query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer')
 ], validate, visitaController.obtenerVisitas);
 
-router.put('/:id'[
+router.put('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido'),
-    body('mascotaId').isMongoId().withMessage('El ID de la mascota debe ser un ID de MongoDB válido'),
-    body('fechaVisita').isISO8601().withMessage('La fecha de visita debe ser una fecha válida'),
-    body('observaciones').notEmpty().withMessage('Las observaciones son obligatorias')
+    body('visIdUsuario').notEmpty().isMongoId().withMessage('El ID de usuario es obligatorio y debe ser un ObjectId válido'),
+    body('visIdMascota').notEmpty().isMongoId().withMessage('El ID de la mascota es obligatorio y debe ser un ObjectId válido'),
+    body('visIdRefugio').notEmpty().isMongoId().withMessage('El ID del refugio es obligatorio y debe ser un ObjectId válido'),
+    body('visFechaVisita').notEmpty().isISO8601().withMessage('La fecha de visita debe ser una fecha válida'),
+    body('visHoraVisita').notEmpty().withMessage('La hora de visita es obligatoria'),
+    body('visEstadoVisita').notEmpty().withMessage('El estado de la visita es obligatorio'),
 ], validate, visitaController.actualizarVisita);
 router.delete('/:id', [
     authMiddleware,
