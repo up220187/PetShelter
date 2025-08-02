@@ -5,7 +5,7 @@ interface AdministrarMascotasButtonProps {
   onClick?: () => void;
 }
 
-export default function AdministrarMascotasButton({ className = "", onClick }: AdministrarMascotasButtonProps) {
+export default function AdministrarSolicitudesButton({ className = "", onClick }: AdministrarMascotasButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -21,7 +21,7 @@ export default function AdministrarMascotasButton({ className = "", onClick }: A
       `}
       style={{ fontFamily: 'Lato, sans-serif' }}
     >
-      Administrar mascotas
+      Administrar Solicitudes
     </button>
   );
 }
