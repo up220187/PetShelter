@@ -20,6 +20,19 @@ const SolicitudAdopcion = require('../models/SolicitudAdopcion');
  */
 exports.crearSolicitud = async (req, res) => {
   try {
+    const { solIdMascota } = req.body;
+    // Validar que el ID es un ObjectId válido
+    if (!solIdMascota || !solIdMascota.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ message: 'ID de mascota inválido.' });
+    }
+    const Mascota = require('../models/Mascota');
+    const mascota = await Mascota.findById(solIdMascota);
+    if (!mascota) {
+      return res.status(404).json({ message: 'Mascota no encontrada.' });
+    }
+    if (mascota.masEstado !== 'Disponible') {
+      return res.status(400).json({ message: 'Solo se puede solicitar adopción si la mascota está disponible.' });
+    }
     const solicitud = new SolicitudAdopcion(req.body);
     await solicitud.save();
     res.status(201).json(solicitud);
@@ -121,6 +134,16 @@ exports.obtenerSolicitudPorId = async (req, res) => {
  */
 exports.actualizarSolicitud = async (req, res) => {
   try {
+    // Si el body incluye solIdMascota, validar que sea igual al actual
+    if (req.body.solIdMascota) {
+      const solicitudActual = await SolicitudAdopcion.findById(req.params.id);
+      if (!solicitudActual) {
+        return res.status(404).json({ error: 'Solicitud no encontrada' });
+      }
+      if (String(req.body.solIdMascota) !== String(solicitudActual.solIdMascota)) {
+        return res.status(400).json({ error: 'No se puede modificar la mascota de la solicitud.' });
+      }
+    }
     const solicitud = await SolicitudAdopcion.findByIdAndUpdate(
       req.params.id,
       req.body,
