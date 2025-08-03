@@ -7,9 +7,9 @@ const seguimientoController = require('../controllers/seguimientoController');
 
 router.post('/', [
     authMiddleware,
-    body('mascotaId').isMongoId().withMessage('El ID de la mascota debe ser un ID de MongoDB válido'),
-    body('fechaSeguimiento').isISO8601().withMessage('La fecha de seguimiento debe ser una fecha válida'),
-    body('observaciones').notEmpty().withMessage('Las observaciones son obligatorias')
+    body('segIdMascotas').isMongoId().withMessage('El ID de la mascota debe ser un ID de MongoDB válido'),
+    body('segFecha').isISO8601().withMessage('La fecha de seguimiento debe ser una fecha válida'),
+    body('segComentarios').notEmpty().withMessage('Las observaciones son obligatorias')
 ], validate, seguimientoController.crearSeguimiento);
 
 router.get('/', [
@@ -18,17 +18,17 @@ router.get('/', [
     query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer')
 ], validate, seguimientoController.obtenerSeguimientos);
 
-router.get('//:id', [
+router.get('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido')
 ], validate, seguimientoController.obtenerSeguimientoPorId);
 
-router.put('//:id', [
+router.put('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido'),
-    body('mascotaId').isMongoId().withMessage('El ID de la mascota debe ser un ID de MongoDB válido'),
-    body('fechaSeguimiento').isISO8601().withMessage('La fecha de seguimiento debe ser una fecha válida'),
-    body('observaciones').notEmpty().withMessage('Las observaciones son obligatorias')
+    body('segIdMascotas').isMongoId().withMessage('El ID de la mascota debe ser un ID de MongoDB válido'),
+    body('segFecha').isISO8601().withMessage('La fecha de seguimiento debe ser una fecha válida'),
+    body('segComentarios').notEmpty().withMessage('Las observaciones son obligatorias')
 ], validate, seguimientoController.actualizarSeguimiento);
 
 router.delete('/:id', [
