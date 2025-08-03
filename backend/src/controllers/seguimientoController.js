@@ -1,4 +1,5 @@
 const Seguimiento = require('../models/Seguimiento');
+const Mascota = require('../models/Mascota');
 
 /**
  * @swagger
@@ -24,6 +25,19 @@ const Seguimiento = require('../models/Seguimiento');
  */
 exports.crearSeguimiento = async (req, res) => {
   try {
+    // Validar que la mascota esté adoptada
+    const mascota = await Mascota.findById(req.body.segIdMascotas);
+    if (!mascota) {
+      return res.status(404).json({ error: 'Mascota no encontrada' });
+    }
+    if (mascota.masEstado !== 'Adoptado') {
+      return res.status(400).json({ error: 'Solo se puede crear seguimiento para mascotas adoptadas' });
+    }
+    // Validar que la mascota no tenga ya un seguimiento
+    const seguimientoExistente = await Seguimiento.findOne({ segIdMascotas: req.body.segIdMascotas });
+    if (seguimientoExistente) {
+      return res.status(400).json({ error: 'La mascota ya tiene un seguimiento activo' });
+    }
     const seguimiento = new Seguimiento(req.body);
     await seguimiento.save();
     res.status(201).json(seguimiento);
@@ -94,9 +108,30 @@ exports.obtenerSeguimientos = async (req, res) => {
  */
 exports.actualizarSeguimiento = async (req, res) => {
   try {
+    const seguimientoOriginal = await Seguimiento.findById(req.params.id);
+    if (!seguimientoOriginal) {
+      return res.status(404).json({ error: 'Seguimiento no encontrado' });
+    }
+    // Validar que los IDs no cambien
+    if (
+      req.body.segIdMascotas && req.body.segIdMascotas !== String(seguimientoOriginal.segIdMascotas)
+    ) {
+      return res.status(400).json({ error: 'No se puede cambiar el ID de la mascota' });
+    }
+    if (
+      req.body.segIdUsuario && req.body.segIdUsuario !== String(seguimientoOriginal.segIdUsuario)
+    ) {
+      return res.status(400).json({ error: 'No se puede cambiar el ID de usuario' });
+    }
+    // Solo actualizar los campos permitidos
+    const camposActualizables = {
+      segFecha: req.body.segFecha,
+      segFotos: req.body.segFotos,
+      segComentarios: req.body.segComentarios
+    };
     const seguimiento = await Seguimiento.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      camposActualizables,
       { new: true }
     );
     if (!seguimiento) {
