@@ -1,13 +1,13 @@
-
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
 const swagger = require('./src/middlewares/swagger')
 
 const connectDB = require('./src/configs/database')
 const app = express();
-const port = 3000;
-const hostname = 'localhost';
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -30,6 +30,15 @@ app.get('/', (req, res) => {
 });
 
 
-app.listen(3000, () => {
-    console.log(`Servidor corriendo en http://${hostname}:${port}`);
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+
+// habilitar CORS para frontend
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}));
+
+app.use(express.json());
