@@ -7,8 +7,7 @@ const swagger = require('./src/middlewares/swagger')
 
 const connectDB = require('./src/configs/database')
 const app = express();
-const port = 3000;
-const hostname = 'localhost';
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -32,8 +31,8 @@ app.get('/', (req, res) => {
 });
 
 
-app.listen(3000, () => {
-    console.log(`Servidor corriendo en http://${hostname}:${port}`);
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
 
