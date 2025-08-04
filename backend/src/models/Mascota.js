@@ -16,7 +16,7 @@ const Schema = mongoose.Schema;
  *         - masEstadoSalud
  *         - masComportamiento
  *         - masEsterilizado
- *         - masIdTipoMascota
+ *         - masTipo
  *         - masIdRefugio
  *       properties:
  *         masNombre:
@@ -50,10 +50,10 @@ const Schema = mongoose.Schema;
  *           type: string
  *           enum: [Disponible, En Proceso, Adoptado]
  *           description: Estado actual de adopción.
- *         masIdTipoMascota:
+ *         masTipo:
  *           type: string
- *           format: uuid
- *           description: ID del tipo de mascota.
+ *           enum: [Perro, Gato, Ave, Reptil, Roedor, Otro]
+ *           description: Tipo de mascota.
  *         masImagen:
  *           type: object
  *           description: Imagen o galería (puede ser mixto).
@@ -71,7 +71,7 @@ const Schema = mongoose.Schema;
  *         masComportamiento: "Juguetón"
  *         masEsterilizado: true
  *         masEstado: "Disponible"
- *         masIdTipoMascota: "60a7c5f7f1d2c731d8f8c456"
+ *         masTipo: "Perro"
  *         masImagen: { url: "https://example.com/fido.jpg" }
  *         masIdRefugio: "60a7c5f7f1d2c731d8f8c123"
  */
@@ -132,12 +132,12 @@ const MascotaSchema = new Schema({
         alias: "T_MasEstado",
         default: 'Disponible'
     },
-    // atributo de id foraneo del refugio
+    // atributo de tipo de mascota
 
-    masIdTipoMascota: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "TipoMascota",
-        alias: "T_MasIdTipoMascota",
+    masTipo: {
+        type: String,
+        enum: ['Perro', 'Gato', 'Ave', 'Reptil', 'Roedor', 'Otro'],
+        alias: "T_MasTipo",
         required: true
     },
 

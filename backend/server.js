@@ -19,7 +19,6 @@ app.use('/estados', require('./src/routes/estadoRoutes'));
 app.use('/mascotas', require('./src/routes/mascotaRoutes'));
 app.use('/refugios', require('./src/routes/refugioRoutes'));
 app.use('/seguimientos', require('./src/routes/seguimientoRoutes'));
-app.use('/tiposMascotas', require('./src/routes/tipoMascotaRoutes'));
 app.use('/solicitudes', require('./src/routes/solicitudAdopcionRoutes'));
 app.use('/usuarios', require('./src/routes/usuarioRoutes'));
 app.use('/visitas', require('./src/routes/visitaRoutes'));

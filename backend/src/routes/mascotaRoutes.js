@@ -35,9 +35,10 @@ router.post(
         body("masEstado")
             .optional()
             .isIn(["Disponible", "En Proceso", "Adoptado"]),
-        body("masIdTipoMascota")
+        body("masTipo")
             .notEmpty()
-            .isMongoId().withMessage("El ID del tipo de mascota debe ser un ObjectId válido"),
+            .isIn(["Perro", "Gato", "Ave", "Reptil", "Roedor", "Otro"])
+            .withMessage("El tipo de mascota es obligatorio y debe ser válido"),
         body("masIdRefugio")
             .notEmpty()
             .isMongoId().withMessage("El ID del refugio debe ser un ObjectId válido"),
@@ -107,9 +108,10 @@ router.put(
         body("masEstado")
             .optional()
             .isIn(["Disponible", "En Proceso", "Adoptado"]),
-        body("masIdTipoMascota")
+        body("masTipo")
             .notEmpty()
-            .isMongoId().withMessage("El ID del tipo de mascota debe ser un ObjectId válido"),
+            .isIn(["Perro", "Gato", "Ave", "Reptil", "Roedor", "Otro"])
+            .withMessage("El tipo de mascota es obligatorio y debe ser válido"),
         body("masIdRefugio")
             .notEmpty()
             .isMongoId().withMessage("El ID del refugio debe ser un ObjectId válido"),

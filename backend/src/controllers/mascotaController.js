@@ -53,7 +53,6 @@ exports.crearMascota = async (req, res) => {
 exports.obtenerMascotas = async (req, res) => {
   try {
     const mascotas = await Mascota.find()
-      .populate('masIdTipoMascota')
       .populate('masIdRefugio');
     res.json(mascotas);
   } catch (error) {
@@ -88,7 +87,6 @@ exports.obtenerMascotas = async (req, res) => {
 exports.obtenerMascotaPorId = async (req, res) => {
   try {
     const mascota = await Mascota.findById(req.params.id)
-      .populate('masIdTipoMascota')
       .populate('masIdRefugio');
     if (!mascota) return res.status(404).json({ error: 'Mascota no encontrada' });
     res.json(mascota);
