@@ -30,8 +30,8 @@ const Schema = mongoose.Schema;
  *           description: Teléfono de contacto.
  *         usuEstado:
  *           type: string
- *           format: uuid
- *           description: ID del estado asociado al usuario.
+ *           enum: [Activo, Inactivo, Suspendido]
+ *           description: Estado del usuario.
  *         usuDireccion:
  *           type: string
  *           description: Dirección del usuario.
@@ -44,7 +44,7 @@ const Schema = mongoose.Schema;
  *         usuCorreo: "ana.perez@example.com"
  *         usuContraseña: "hashedpassword123"
  *         usuTelefono: "5551234567"
- *         usuEstado: "60b9c3f1f5a3e240d0f4b123"
+ *         usuEstado: "Activo"
  *         usuDireccion: "Av. Libertad #321"
  *         usuRol: "adoptante"
  */
@@ -72,9 +72,10 @@ const UsuarioSchema = new Schema({
     },
 
     usuEstado: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Estado", 
-        alias: "T_UsuEstado", 
+        type: String,
+        enum: ['Activo', 'Inactivo', 'Suspendido'],
+        alias: "T_UsuEstado",
+        default: 'Activo'
     },
 
     usuDireccion: { type: String, 

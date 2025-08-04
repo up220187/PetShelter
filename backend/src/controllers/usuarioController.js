@@ -1,6 +1,5 @@
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
-const Estado = require('../models/Estado');
 
 /**
  * @swagger
@@ -63,7 +62,7 @@ exports.crearUsuario = async (req, res) => {
  */
 exports.obtenerUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.find().populate('usuEstado');
+    const usuarios = await Usuario.find();
     
     // Eliminar contraseñas de la respuesta
     const usuariosSinPassword = usuarios.map(usuario => {
@@ -106,7 +105,7 @@ exports.obtenerUsuarios = async (req, res) => {
 exports.obtenerUsuarioPorId = async (req, res) => {
   try {
     const { id } = req.params;
-    const usuario = await Usuario.findById(id).populate('usuEstado');
+    const usuario = await Usuario.findById(id);
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
@@ -148,7 +147,7 @@ exports.loginUsuario = async (req, res) => {
     const { usuCorreo, usuContraseña } = req.body;
     
     // Buscar usuario por correo
-    const usuario = await Usuario.findOne({ usuCorreo }).populate('usuEstado');
+    const usuario = await Usuario.findOne({ usuCorreo });
     if (!usuario) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
@@ -207,7 +206,7 @@ exports.actualizarUsuario = async (req, res) => {
       datosActualizados.usuContraseña = await bcrypt.hash(datosActualizados.usuContraseña, salt);
     }
 
-    const usuario = await Usuario.findByIdAndUpdate(id, datosActualizados, { new: true }).populate('usuEstado');
+    const usuario = await Usuario.findByIdAndUpdate(id, datosActualizados, { new: true });
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }

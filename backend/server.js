@@ -15,7 +15,6 @@ connectDB();
 swagger(app);
 
 //Rutas
-app.use('/estados', require('./src/routes/estadoRoutes'));
 app.use('/mascotas', require('./src/routes/mascotaRoutes'));
 app.use('/refugios', require('./src/routes/refugioRoutes'));
 app.use('/seguimientos', require('./src/routes/seguimientoRoutes'));
