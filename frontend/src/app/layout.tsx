@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { AuthProvider } from "./context/AuthContext"; // Ajusta la ruta según la ubicación real del archivo
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,13 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      className="flex"
-        //className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <main className="flex-1 p-0">{children}</main>
-
-        
+      <body className="flex">
+        <AuthProvider>
+          <main className="flex-1 p-0">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
