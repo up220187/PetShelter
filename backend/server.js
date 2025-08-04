@@ -1,6 +1,7 @@
-
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
 
 const swagger = require('./src/middlewares/swagger')
 
@@ -34,3 +35,12 @@ app.get('/', (req, res) => {
 app.listen(3000, () => {
     console.log(`Servidor corriendo en http://${hostname}:${port}`);
 });
+
+
+// habilitar CORS para frontend
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}));
+
+app.use(express.json());
