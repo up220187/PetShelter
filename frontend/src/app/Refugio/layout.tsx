@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 import AdministrarMascotasButton from "../components/Refugio/AdministrarMascotas";
 import ConfirmarAdopcionesButton from "../components/Refugio/confirmarAdopciones";
-import AdministrarSolicitudesButton from "../components/Refugio/AdministrarSolicitudes";
+import AdministrarSolicitudesButton from "../components/Refugio/AdministrarVisitas";
 import AdministrarRefugioButton from "../components/Refugio/AdministrarRefugio";
 
 export default function ShelterDashboardLayout({
