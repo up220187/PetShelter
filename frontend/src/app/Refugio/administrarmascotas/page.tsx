@@ -1,129 +1,266 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 import { useAuth } from "../../context/AuthContext";
+import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
+import EditDocumentIcon from "../../components/icon/EditDocumentIcon";
+import CloseCircleIcon from "../../components/icon/CloseCircleIcon";
 
-const enumOptions = {
-  masSexo: ["Macho", "Hembra"],
-  masTamaño: ["Pequeño", "Mediano", "Grande"],
-  masComportamiento: ["Agresivo", "Asustadizo", "Juguetón", "Tranquilo"],
-  masEstado: ["Disponible", "En Proceso", "Adoptado"],
-  masTipo: ["Perro", "Gato", "Ave", "Reptil", "Roedor", "Otro"],
-};
+interface Mascota {
+  _id: string;
+  masNombre: string;
+  masSexo: string;
+  masImagen?: string;
+  masIdRefugio: string;
+  masRaza?: string;
+  masNacimiento?: string;
+  masTamaño?: string;
+  masEstadoSalud?: string;
+  masComportamiento?: string;
+  masEsterilizado?: boolean;
+  masEstado?: string;
+  masTipo?: string;
+}
 
-const AgregarMascota = () => {
+export default function AdministrarMascotas() {
   const { user, token } = useAuth();
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
+  const [mascotas, setMascotas] = useState<Mascota[]>([]);
+  const [selectedPet, setSelectedPet] = useState<Mascota | null>(null);
+  const [formData, setFormData] = useState<Partial<Mascota>>({
     masNombre: "",
+    masSexo: "Macho",
+    masTipo: "Perro",
+    masTamaño: "Mediano",
+    masEstado: "Disponible",
+    masComportamiento: "Tranquilo",
+    masEsterilizado: false,
+    masEstadoSalud: "",
     masRaza: "",
     masNacimiento: "",
-    masSexo: "",
-    masTamaño: "",
-    masEstadoSalud: "",
-    masComportamiento: "",
-    masEsterilizado: false,
-    masEstado: "Disponible",
-    masTipo: "",
+    masIdRefugio: user?.usuId || "",
     masImagen: "",
   });
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  // Cargar mascotas del refugio
+  useEffect(() => {
+    if (!token || !user?.usuId) return;
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const delRefugio = data.filter((m: Mascota) => m.masIdRefugio === user.usuId);
+        setMascotas(delRefugio);
+      });
+  }, [token, user]);
+
+  const resetForm = () => {
+    setFormData({
+      masNombre: "",
+      masSexo: "Macho",
+      masTipo: "Perro",
+      masTamaño: "Mediano",
+      masEstado: "Disponible",
+      masComportamiento: "Tranquilo",
+      masEsterilizado: false,
+      masEstadoSalud: "",
+      masRaza: "",
+      masNacimiento: "",
+      masIdRefugio: user?.usuId || "",
+      masImagen: "",
+    });
+    setSelectedPet(null);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    const isCheckbox = type === "checkbox";
+    const checked = isCheckbox ? (e.target as HTMLInputElement).checked : undefined;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+      [name]: isCheckbox ? checked : value,
     }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const url = await uploadToCloudinary(file);
+      setFormData((prev) => ({ ...prev, masImagen: url }));
+    } catch {
+      alert("Error al subir imagen");
+    }
+  };
+
+  const handleSelect = (pet: Mascota) => {
+    setSelectedPet(pet);
+    setFormData({ ...pet });
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirm = window.confirm("¿Seguro que quieres eliminar esta mascota?");
+    if (!confirm) return;
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error();
+      alert("Mascota eliminada");
+      setMascotas((prev) => prev.filter((m) => m._id !== id));
+      resetForm();
+    } catch {
+      alert("Error al eliminar");
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    const method = selectedPet ? "PUT" : "POST";
+    const endpoint = selectedPet ? `/mascotas/${selectedPet._id}` : "/mascotas";
 
     try {
-      let imageUrl = "";
-
-      if (imageFile) {
-        imageUrl = await uploadToCloudinary(imageFile);
-      }
-
-      const mascotaData = {
-        ...formData,
-        masImagen: imageUrl,
-        masIdRefugio: user?.usuId,
-      };
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
-        method: "POST",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(mascotaData),
+        body: JSON.stringify(formData),
       });
 
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error || "Error al guardar la mascota");
+      if (!res.ok) throw new Error();
+      const saved = await res.json();
+      alert(`Mascota ${selectedPet ? "actualizada" : "registrada"} correctamente`);
+
+      // Refrescar lista
+      if (selectedPet) {
+        setMascotas((prev) => prev.map((m) => (m._id === saved._id ? saved : m)));
+      } else {
+        setMascotas((prev) => [...prev, saved]);
       }
 
-      alert("Mascota registrada con éxito");
-      router.push("/Refugio");
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
+      resetForm();
+    } catch {
+      alert("Error al guardar la mascota");
     }
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Registrar Nueva Mascota</h2>
+    <div className="flex p-6 gap-6 bg-gray-50 min-h-screen">
+      {/* Lista de mascotas */}
+      <div className="w-1/3 bg-white rounded-lg shadow p-4 overflow-y-auto max-h-[90vh]">
+        <h2 className="text-xl font-bold mb-4">Mascotas Registradas</h2>
+        {mascotas.length ? (
+          <ul className="space-y-4">
+            {mascotas.map((pet) => (
+              <li
+                key={pet._id}
+                className={`flex items-center gap-3 p-2 rounded hover:bg-yellow-100 transition ${
+                  selectedPet?._id === pet._id ? "bg-yellow-200" : ""
+                }`}
+              >
+                <img
+                  src={pet.masImagen || "/placeholder.jpg"}
+                  alt={pet.masNombre}
+                  className="w-12 h-12 rounded-full object-cover cursor-pointer"
+                  onClick={() => handleSelect(pet)}
+                />
+                <div className="flex-1 cursor-pointer" onClick={() => handleSelect(pet)}>
+                  <p className="font-semibold">{pet.masNombre}</p>
+                  <p className="text-sm text-gray-600">{pet.masSexo}</p>
+                </div>
+                <button onClick={() => handleSelect(pet)} title="Editar">
+                  <EditDocumentIcon width={24} height={24} stroke="#1E40AF" />
+                </button>
+                <button onClick={() => handleDelete(pet._id)} title="Eliminar">
+                  <CloseCircleIcon width={24} height={24} stroke="#DC2626" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500">No hay mascotas registradas.</p>
+        )}
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input name="masNombre" type="text" placeholder="Nombre" className="input input-bordered w-full" onChange={handleChange} required />
-        <input name="masRaza" type="text" placeholder="Raza" className="input input-bordered w-full" onChange={handleChange} />
-        <input name="masNacimiento" type="date" className="input input-bordered w-full" onChange={handleChange} required />
-        <select name="masSexo" className="select select-bordered w-full" onChange={handleChange} required>
-          <option value="">Sexo</option>
-          {enumOptions.masSexo.map((op) => <option key={op}>{op}</option>)}
-        </select>
-        <select name="masTamaño" className="select select-bordered w-full" onChange={handleChange} required>
-          <option value="">Tamaño</option>
-          {enumOptions.masTamaño.map((op) => <option key={op}>{op}</option>)}
-        </select>
-        <input name="masEstadoSalud" type="text" placeholder="Estado de salud" className="input input-bordered w-full" onChange={handleChange} />
-        <select name="masComportamiento" className="select select-bordered w-full" onChange={handleChange} required>
-          <option value="">Comportamiento</option>
-          {enumOptions.masComportamiento.map((op) => <option key={op}>{op}</option>)}
-        </select>
-        <select name="masTipo" className="select select-bordered w-full" onChange={handleChange} required>
-          <option value="">Tipo de mascota</option>
-          {enumOptions.masTipo.map((op) => <option key={op}>{op}</option>)}
-        </select>
-        <label className="label cursor-pointer">
-          <span className="label-text">¿Está esterilizado?</span>
-          <input type="checkbox" name="masEsterilizado" className="checkbox" onChange={handleChange} />
-        </label>
-        <input type="file" accept="image/*" onChange={handleImageChange} className="file-input file-input-bordered w-full" />
-        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
-          {loading ? "Guardando..." : "Registrar Mascota"}
-        </button>
-      </form>
+      {/* Formulario */}
+      <div className="w-2/3 bg-white rounded-lg shadow p-6">
+        <h2 className="text-2xl font-bold mb-4">
+          {selectedPet ? "Editar Mascota" : "Registrar Nueva Mascota"}
+        </h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+          <input name="masNombre" placeholder="Nombre" value={formData.masNombre || ""} onChange={handleChange} className="input" />
+          <input name="masRaza" placeholder="Raza" value={formData.masRaza || ""} onChange={handleChange} className="input" />
+          <input type="date" name="masNacimiento" value={formData.masNacimiento || ""} onChange={handleChange} className="input" />
+
+          <select name="masSexo" value={formData.masSexo || ""} onChange={handleChange} className="input">
+            <option value="Macho">Macho</option>
+            <option value="Hembra">Hembra</option>
+          </select>
+
+          <select name="masTamaño" value={formData.masTamaño || ""} onChange={handleChange} className="input">
+            <option value="Pequeño">Pequeño</option>
+            <option value="Mediano">Mediano</option>
+            <option value="Grande">Grande</option>
+          </select>
+
+          <input name="masEstadoSalud" placeholder="Estado de Salud" value={formData.masEstadoSalud || ""} onChange={handleChange} className="input" />
+
+          <select name="masComportamiento" value={formData.masComportamiento || ""} onChange={handleChange} className="input">
+            <option value="Tranquilo">Tranquilo</option>
+            <option value="Juguetón">Juguetón</option>
+            <option value="Asustadizo">Asustadizo</option>
+            <option value="Agresivo">Agresivo</option>
+          </select>
+
+          <select name="masTipo" value={formData.masTipo || ""} onChange={handleChange} className="input">
+            <option value="Perro">Perro</option>
+            <option value="Gato">Gato</option>
+            <option value="Ave">Ave</option>
+            <option value="Reptil">Reptil</option>
+            <option value="Roedor">Roedor</option>
+            <option value="Otro">Otro</option>
+          </select>
+
+          <select name="masEstado" value={formData.masEstado || ""} onChange={handleChange} className="input">
+            <option value="Disponible">Disponible</option>
+            <option value="En Proceso">En Proceso</option>
+            <option value="Adoptado">Adoptado</option>
+          </select>
+
+          <div className="flex items-center col-span-2 gap-2">
+            <label className="text-sm">¿Esterilizado?</label>
+            <input name="masEsterilizado" type="checkbox" checked={!!formData.masEsterilizado} onChange={handleChange} />
+          </div>
+
+          <div className="col-span-2">
+            <label className="block mb-1">Imagen:</label>
+            <input type="file" accept="image/*" onChange={handleImageUpload} />
+            {formData.masImagen && (
+              <img src={formData.masImagen} alt="Preview" className="w-24 h-24 rounded-full object-cover mt-2" />
+            )}
+          </div>
+
+          <div className="col-span-2 flex justify-between">
+            <button type="submit" className="bg-yellow-400 hover:bg-yellow-300 text-white px-4 py-2 rounded">
+              {selectedPet ? "Actualizar" : "Registrar"}
+            </button>
+            {selectedPet && (
+              <button type="button" className="text-gray-600 underline" onClick={resetForm}>
+                Cancelar edición
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
-};
-
-export default AgregarMascota;
+}
