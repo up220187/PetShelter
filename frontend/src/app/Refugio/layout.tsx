@@ -10,6 +10,7 @@ import AdministrarMascotasButton from "../components/Refugio/AdministrarMascotas
 import ConfirmarAdopcionesButton from "../components/Refugio/confirmarAdopciones";
 import AdministrarVisitasButton from "../components/Refugio/AdministrarVisitas";
 import AdministrarRefugioButton from "../components/Refugio/AdministrarRefugio";
+import AdministrarSeguimientoButton from "../components/Refugio/AdministrarSeguimiento";
 
 export default function ShelterDashboardLayout({
   children,
@@ -54,6 +55,9 @@ export default function ShelterDashboardLayout({
             </Link>
             <Link href="/Refugio/administrarvisitas">
               <AdministrarVisitasButton />
+            </Link>
+            <Link href="/Refugio/administrarseguimiento">
+              <AdministrarSeguimientoButton />
             </Link>
             <Link href="/Refugio/administrarrefugio">
               <AdministrarRefugioButton />
