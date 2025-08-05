@@ -705,6 +705,15 @@
   content: "Tu Foto";
 }
 
+.profile-picture-preview {
+  width: 150px;    
+  height: 150px;     
+  border-radius: 50%; 
+  object-fit: cover;  
+  border: 4px solid #f97316; 
+  margin-bottom: 20px;
+}
+
 .file-upload-input {
   display: none;
 }
