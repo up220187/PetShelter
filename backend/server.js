@@ -4,15 +4,23 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const swagger = require('./src/middlewares/swagger')
-
 const connectDB = require('./src/configs/database')
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+
 
 connectDB();
 swagger(app);
+
+// Aplica CORS antes de cualquier ruta
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "http://localhost:3001",
+  credentials: true
+}));
+
+// Middleware JSON
+app.use(express.json());
 
 //Rutas
 app.use('/mascotas', require('./src/routes/mascotaRoutes'));
@@ -33,11 +41,3 @@ app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
-
-// habilitar CORS para frontend
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true
-}));
-
-app.use(express.json());
