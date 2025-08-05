@@ -2247,6 +2247,7 @@ html, body {
   border-radius: 25px;
   font-size: 1.1rem;
   font-weight: bold;
+  margin-right: 5px;
   cursor: pointer;
   border: none;
   transition: background-color 0.2s ease, transform 0.2s ease;
