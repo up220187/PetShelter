@@ -86,7 +86,13 @@ const UsuarioSchema = new Schema({
         type: String,
         values: ['adoptante', 'refugio'],
         alias: "T_UsuRol",
-    }
+    },
+
+    usuFotoPerfil: {
+        type: String,
+        alias: "T_UsuFotoPerfil"
+}
+
 });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema, "T_Usuario");
