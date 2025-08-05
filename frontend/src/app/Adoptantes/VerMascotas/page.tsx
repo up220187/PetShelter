@@ -24,6 +24,8 @@ interface Mascota {
 export default function ViewPetsPage() {
   const [selectedPet, setSelectedPet] = useState<Mascota | null>(null);
   const [availablePets, setAvailablePets] = useState<Mascota[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { token, isLoading } = useAuth();
 
@@ -32,22 +34,32 @@ export default function ViewPetsPage() {
 
     if (!token) {
       console.error('No hay token de autenticación');
+      setLoading(false);
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
+    const fetchMascotas = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            // Token expirado o inválido
+            throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+          }
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
-        return res.json();
-      })
-      .then(data => {
+
+        const data = await response.json();
+        
         // Verificar que data sea un array antes de hacer filter
         if (Array.isArray(data)) {
           const disponibles = data.filter((m: Mascota) => m && m.masEstado === "Disponible");
@@ -56,11 +68,16 @@ export default function ViewPetsPage() {
           console.error('La respuesta no es un array:', data);
           setAvailablePets([]);
         }
-      })
-      .catch(error => {
+      } catch (error: any) {
         console.error('Error al obtener mascotas:', error);
+        setError(error.message || 'Error al cargar las mascotas');
         setAvailablePets([]);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMascotas();
   }, [token, isLoading]);
 
   const handleSelectPet = (pet: Mascota) => {
@@ -88,16 +105,25 @@ router.push(`/Adoptantes/solicitarvisita?mascotaId=${selectedPet._id}&petName=${
       <div className="view-pets-container">
         <h1 className="view-pets-title">Mascotas Disponibles para Adopción</h1>
 
-        <div className="view-pets-grid">
-          {/* Columna izquierda: Lista de mascotas */}
-          <div className="pets-list-section">
-            <h2 className="section-title">Nuestras Mascotas</h2>
-            {availablePets.length > 0 ? (
-              <div className="pets-cards-container">
-                {availablePets.map((pet) => (
-                  <div
-                    key={pet._id}
-                    className={`pet-card-summary ${selectedPet && selectedPet._id === pet._id ? 'selected' : ''}`}
+        {loading ? (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-lg">Cargando mascotas...</div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-red-500 text-lg">{error}</div>
+          </div>
+        ) : (
+          <div className="view-pets-grid">
+            {/* Columna izquierda: Lista de mascotas */}
+            <div className="pets-list-section">
+              <h2 className="section-title">Nuestras Mascotas</h2>
+              {availablePets.length > 0 ? (
+                <div className="pets-cards-container">
+                  {availablePets.map((pet) => (
+                    <div
+                      key={pet._id}
+                      className={`pet-card-summary ${selectedPet && selectedPet._id === pet._id ? 'selected' : ''}`}
                     onClick={() => handleSelectPet(pet)}
                   >
                     <div
@@ -162,6 +188,7 @@ router.push(`/Adoptantes/solicitarvisita?mascotaId=${selectedPet._id}&petName=${
             )}
           </div>
         </div>
+        )}
       </div>
     </ProtectedRoute>
   );
