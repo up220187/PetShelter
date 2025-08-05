@@ -70,7 +70,7 @@ export default function ViewPetsPage() {
   const handleSolicitarVisitaClick = () => {
     if (selectedPet) {
       // Assuming 'solicitar-visita' is the correct page for visit requests
-      router.push(`/dashboard/customer/solicitar-visita?petId=${selectedPet._id}&petName=${selectedPet.masNombre}`);
+router.push(`/Adoptantes/solicitarvisita?mascotaId=${selectedPet._id}&petName=${selectedPet.masNombre}`);
     }
   };
 

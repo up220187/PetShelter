@@ -56,12 +56,6 @@ const VisitaSchema = new mongoose.Schema({
         required: true 
     },
     
-    visIdRefugio: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Refugio", 
-        alias: "T_VisIdRefugio",
-        required: true 
-    },
     
     visFechaVisita: { 
         type: Date, 
