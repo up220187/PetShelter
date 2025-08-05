@@ -1,6 +1,13 @@
-import React from "react";
+// src/app/dashboard/adoptante/layout.tsx
+"use client";
+
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search as SearchIcon, FilterList as FilterIcon } from "@mui/icons-material";
+
+// ¡Importa el useAuth hook de tu AuthProvider!
+import { useAuth } from "../context/AuthContext";
 
 import VerMascotasButton from "../components/Adoptante/VerMascotas";
 import SolicitarAdopcionButton from "../components/Adoptante/SolicitarAdopcion";
@@ -8,13 +15,32 @@ import AdministrarVisitaButton from "../components/Adoptante/AdministrarVisita";
 import AdministrarPerfilButton from "../components/Adoptante/AdministrarPerfil";
 
 export default function AdoptanteLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { logout } = useAuth(); // Usar el logout del contexto
+
+  const handleLogout = () => {
+    logout(); // Llama a la función logout del contexto
+    console.log('Sesión cerrada. Redirigiendo al login.');
+    router.push('/login');
+  };
+
+  // Efecto para verificar el estado de la autenticación al cargar el componente
+  useEffect(() => {
+    // AHORA LEE "authToken"
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.log('Layout: No se encontró authToken de sesión en localStorage. Redirigiendo al login.');
+      router.push('/login');
+    }
+  }, [router]);
+
   return (
     <div className="adoptante-layout-container">
       <header className="adoptante-header">
         <div className="logo-section">
           <Link href="/Adoptantes">
-            <img 
-              src="/logo2.png" 
+            <img
+              src="/logo2.png"
               alt="Pet Shelter Logo"
             />
           </Link>
@@ -38,6 +64,23 @@ export default function AdoptanteLayout({ children }: { children: React.ReactNod
             <Link href="/Adoptantes/AdministrarPerfil">
               <AdministrarPerfilButton />
             </Link>
+            {/* Botón de Logout para Adoptante */}
+            <button
+              onClick={handleLogout}
+              className="logout-button"
+              style={{
+                padding: '10px 15px',
+                backgroundColor: '#dc3545',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginLeft: '20px',
+                fontSize: '1rem',
+              }}
+            >
+              Cerrar Sesión
+            </button>
           </nav>
         </div>
       </header>
