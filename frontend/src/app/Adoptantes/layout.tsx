@@ -9,6 +9,7 @@ import { useAuth } from "../context/AuthContext";
 
 import VerMascotasButton from "../components/Adoptante/VerMascotas";
 import SolicitarAdopcionButton from "../components/Adoptante/SolicitarAdopcion";
+import SolicitarVisitaButton from "../components/Adoptante/SolicitarVisita";
 import AdministrarVisitaButton from "../components/Adoptante/AdministrarVisita";
 import AdministrarPerfilButton from "../components/Adoptante/AdministrarPerfil";
 
@@ -53,6 +54,9 @@ export default function AdoptanteLayout({ children }: { children: React.ReactNod
             </Link>
             <Link href="/Adoptantes/SolicitarAdopcion">
               <SolicitarAdopcionButton />
+            </Link>
+            <Link href="/Adoptantes/SolicitarVisita">
+              <SolicitarVisitaButton />
             </Link>
             <Link href="/Adoptantes/AdministrarVisita">
               <AdministrarVisitaButton />
