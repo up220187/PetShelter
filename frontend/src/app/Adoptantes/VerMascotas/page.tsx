@@ -3,37 +3,64 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ProtectedRoute from "../../components/ProtectedRoute";
+import { useAuth } from "../../context/AuthContext";
 
 interface Mascota {
   _id: string;
   masNombre: string;
-  masTipoMascota: string;
+  masRaza: string;
+  masTipo: string; // Cambiado de masTipoMascota a masTipo
   masSexo: string;
   masTamaño: string;
   masEstado: string;
   masComportamiento: string;
   masEstadoSalud: string;
   masNacimiento: string;
-  imageUrl?: string; // link a imagen real (si existe)
+  masEsterilizado: boolean;
+  masImagen?: string; // Cambiado de imageUrl a masImagen
 }
 
 export default function ViewPetsPage() {
   const [selectedPet, setSelectedPet] = useState<Mascota | null>(null);
   const [availablePets, setAvailablePets] = useState<Mascota[]>([]);
   const router = useRouter();
+  const { token, isLoading } = useAuth();
 
   useEffect(() => {
+    if (isLoading) return; // Esperar a que termine de cargar
+    
+    if (!token) {
+      console.error('No hay token de autenticación');
+      return;
+    }
+
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
       headers: {
-        Authorization: "Bearer TU_TOKEN", // ⚠️ Reemplaza con token real desde contexto
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
       },
     })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
-        const disponibles = data.filter((m: Mascota) => m.masEstado === "Disponible");
-        setAvailablePets(disponibles);
+        // Verificar que data sea un array antes de hacer filter
+        if (Array.isArray(data)) {
+          const disponibles = data.filter((m: Mascota) => m && m.masEstado === "Disponible");
+          setAvailablePets(disponibles);
+        } else {
+          console.error('La respuesta no es un array:', data);
+          setAvailablePets([]);
+        }
+      })
+      .catch(error => {
+        console.error('Error al obtener mascotas:', error);
+        setAvailablePets([]);
       });
-  }, []);
+  }, [token, isLoading]);
 
   const handleSelectPet = (pet: Mascota) => {
     setSelectedPet(pet);
@@ -65,7 +92,7 @@ export default function ViewPetsPage() {
                     <div
                       className="pet-summary-photo-placeholder"
                       style={{
-                        backgroundImage: `url(${pet.imageUrl || "/images/pet_placeholder.jpg"})`,
+                        backgroundImage: `url(${pet.masImagen || "/images/pet_placeholder.jpg"})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         borderRadius: "9999px", // círculo
@@ -89,7 +116,7 @@ export default function ViewPetsPage() {
                   <div
                     className="pet-details-photo-placeholder active"
                     style={{
-                      backgroundImage: `url(${selectedPet.imageUrl || "/images/pet_placeholder.jpg"})`,
+                      backgroundImage: `url(${selectedPet.masImagen || "/images/pet_placeholder.jpg"})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       borderRadius: "9999px", // círculo
