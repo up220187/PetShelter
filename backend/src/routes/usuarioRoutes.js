@@ -25,8 +25,7 @@ router.get('/:id', [
 router.put('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido'),
-    body('usuCorreo').isEmail().withMessage('Debe ser un correo electrónico válido'),
-    body('usuContraseña').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres')
+    body('usuCorreo').isEmail().withMessage('Debe ser un correo electrónico válido')
 ], validate, usuarioController.actualizarUsuario);
 
 router.delete('/:id', [

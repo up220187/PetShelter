@@ -1,82 +1,140 @@
-// src/app/dashboard/customer/profile/page.tsx
 "use client";
 
-import Image from "next/image"; // Aunque no importamos una imagen, mantenemos la importación de Image por si acaso.
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { getUsuarioPorId, actualizarUsuario } from "../../services/usuarioService";
+import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 
 export default function AdoptanteProfilePage() {
+  const { user, token } = useAuth();
+
+  const [formData, setFormData] = useState({
+    usuNombre: "",
+    usuCorreo: "",
+    usuTelefono: "",
+    usuDireccion: "",
+    usuFotoPerfil: "",
+    extra: ""
+  });
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user || !token) return;
+
+    getUsuarioPorId(user.usuId, token)
+      .then((data) => {
+        setFormData({
+          usuNombre: data.usuNombre || "",
+          usuCorreo: data.usuCorreo || "",
+          usuTelefono: data.usuTelefono || "",
+          usuDireccion: data.usuDireccion || "",
+          usuFotoPerfil: data.usuFotoPerfil || "",
+          extra: ""
+        });
+        setImagePreview(data.usuFotoPerfil || null);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error al cargar perfil:", err);
+        setLoading(false);
+      });
+  }, [user, token]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const url = await uploadToCloudinary(file);
+      setFormData((prev) => ({ ...prev, usuFotoPerfil: url }));
+      setImagePreview(url);
+    } catch {
+      alert("Error al subir la imagen a Cloudinary");
+    }
+  };
+
+  const handleSave = async () => {
+    if (!user || !token) return;
+    try {
+      await actualizarUsuario(user.usuId, token, formData);
+      alert("Perfil actualizado correctamente");
+    } catch (err) {
+      console.error(err);
+      alert("Error al actualizar perfil");
+    }
+  };
+
+  if (loading) return <p className="text-center mt-10">Cargando perfil...</p>;
+
   return (
     <div className="profile-management-container">
       <h1 className="profile-title">Administrar Perfil</h1>
 
       <div className="profile-grid">
-        {/* Sección de la imagen de perfil (espacio en blanco para la foto), similar al logo del refugio */}
+        {/* Imagen */}
         <div className="profile-image-section">
-          <div className="profile-picture-empty"></div>
-          {/* Opcional: Input para subir foto de perfil */}
-          <input type="file" id="profile-picture-upload" className="file-upload-input" />
+          {imagePreview ? (
+            <img src={imagePreview} alt="Foto de perfil" className="profile-picture-preview" />
+          ) : (
+            <div className="profile-picture-empty"></div>
+          )}
+          <input type="file" id="profile-picture-upload" className="file-upload-input" onChange={handleImageUpload} />
           <label htmlFor="profile-picture-upload" className="file-upload-label">Subir Foto de Perfil</label>
         </div>
 
-        {/* Sección del nombre del usuario (vacía), movida para que quede al lado de la descripción o en una celda propia */}
+        {/* Nombre */}
         <div className="profile-name-section">
           <h2 className="section-title">Nombre Completo</h2>
-          <input type="text" id="name-user" className="profile-input" placeholder="Tu nombre completo" />
+          <input type="text" name="usuNombre" className="profile-input" value={formData.usuNombre} onChange={handleChange} />
         </div>
 
-        {/* Sección de contacto (vacía), similar a la sección de contacto del refugio */}
+        {/* Contacto */}
         <div className="profile-contact-section">
           <h2 className="section-title">Contacto</h2>
           <div className="input-group">
-            <label htmlFor="email" className="input-label">Email:</label>
-            <input type="email" id="email" className="profile-input" placeholder="tu.email@ejemplo.com" />
+            <label className="input-label">Email:</label>
+            <input type="email" name="usuCorreo" className="profile-input" value={formData.usuCorreo} onChange={handleChange} />
           </div>
           <div className="input-group">
-            <label htmlFor="phone" className="input-label">Teléfono:</label>
-            <input type="tel" id="phone" className="profile-input" placeholder="Ej: +52 55 1234 5678" />
+            <label className="input-label">Teléfono:</label>
+            <input type="tel" name="usuTelefono" className="profile-input" value={formData.usuTelefono} onChange={handleChange} />
           </div>
         </div>
 
-        {/* Sección de descripción (vacía) */}
-        <div className="profile-description-section">
-          <h2 className="section-title">Descripción Personal</h2>
-          <textarea
-            id="description"
-            className="profile-textarea"
-            rows={4}
-            placeholder="Cuéntanos un poco sobre ti y por qué quieres adoptar..."
-          ></textarea>
-        </div>
-
-        {/* Sección de datos personales (vacía), similar a la dirección del refugio */}
+        {/* Dirección */}
         <div className="profile-personal-data-section">
           <h2 className="section-title">Datos Personales</h2>
           <div className="input-group">
-            <label htmlFor="address" className="input-label">Dirección:</label>
-            <input type="text" id="address" className="profile-input" placeholder="Tu dirección completa" />
+            <label className="input-label">Dirección:</label>
+            <input type="text" name="usuDireccion" className="profile-input" value={formData.usuDireccion} onChange={handleChange} />
           </div>
-          {/* Puedes añadir más campos personales aquí, por ejemplo:
-          <div className="input-group">
-            <label htmlFor="age" className="input-label">Edad:</label>
-            <input type="number" id="age" className="profile-input" placeholder="Tu edad" />
-          </div>
-          */}
         </div>
 
-        {/* Sección de información adicional (vacía) */}
+        {/* Información adicional */}
         <div className="profile-additional-info-section">
           <h2 className="section-title">Información Adicional</h2>
           <textarea
-            id="additional-info"
+            name="extra"
             className="profile-textarea"
             rows={4}
-            placeholder="Alguna información extra que quieras compartir (ej. experiencia con mascotas, espacio en casa)."
+            value={formData.extra}
+            onChange={handleChange}
+            placeholder="Ej. experiencia con mascotas, espacio disponible, etc."
           ></textarea>
         </div>
       </div>
 
+      {/* Botones */}
       <div className="profile-actions">
-        <button className="save-button">Guardar Cambios</button>
-        <button className="cancel-button">Cancelar</button>
+        <button className="save-button" onClick={handleSave}>Guardar Cambios</button>
+        <button className="cancel-button" onClick={() => window.location.reload()}>Cancelar</button>
       </div>
     </div>
   );
