@@ -132,8 +132,10 @@ exports.login = async (req, res) => {
         res.status(200).json({
             token,
             user: {
+                usuId: user._id, // ← aquí se incluye el ID del usuario
                 usuCorreo: user.usuCorreo,
-                usuNombre: user.usuNombre
+                usuNombre: user.usuNombre,
+                usuRol: user.usuRol // opcional si manejas roles
             }
         });
     } catch (error) {

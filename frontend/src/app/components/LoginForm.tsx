@@ -35,9 +35,12 @@ export default function LoginForm() {
       login(data.token, data.user);
       setSuccess(true);
 
-      // Redirigir tras un breve delay para que se vea el mensaje
+      // Redirigir según el rol del usuario
+      const rol = data.user.usuRol?.toLowerCase();
+      const destino = rol === "refugio" ? "/Refugio" : "/Adoptantes";
+
       setTimeout(() => {
-        router.push("/Adoptantes");
+        router.push(destino);
       }, 1500);
     } catch (err) {
       setError("Usuario o contraseña incorrectos. Vuelve a intentarlo.");

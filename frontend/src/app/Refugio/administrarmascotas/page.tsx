@@ -1,103 +1,129 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
-import CheckButton from '../../components/icon/CheckButton';
-import EditDocumentIcon from '../../components/icon/EditDocumentIcon';
-import AddSquareIcon from '../../components/icon/AddSquareIcon';
-//ejemplossss
-export default function AdministrarMascotasPage() {
-  const [selectedPet, setSelectedPet] = useState(null);
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
+import { useAuth } from "../../context/AuthContext";
+
+const enumOptions = {
+  masSexo: ["Macho", "Hembra"],
+  masTamaño: ["Pequeño", "Mediano", "Grande"],
+  masComportamiento: ["Agresivo", "Asustadizo", "Juguetón", "Tranquilo"],
+  masEstado: ["Disponible", "En Proceso", "Adoptado"],
+  masTipo: ["Perro", "Gato", "Ave", "Reptil", "Roedor", "Otro"],
+};
+
+const AgregarMascota = () => {
+  const { user, token } = useAuth();
   const router = useRouter();
 
-  // Asegúrate de que los IDs aquí sean strings para coincidir con el `petId` de la URL
-  const allPets = [
-    { id: '1', name: "Pelusa", gender: "Macho", age: "7 meses", description: "Pelusa es un gato muy bonito al que le gusta socializar con las personas.", health: "Vacunado", imageUrl: "/images/cat_placeholder.jpg" },
-    { id: '2', name: "Trueno", gender: "Hembra", age: "2 años", description: "Trueno es muy enérgica y le encanta jugar a la pelota.", health: "Esterilizada, Vacunada", imageUrl: "/images/dog_placeholder.jpg" },
-    { id: '3', name: "Luna", gender: "Hembra", age: "1 año", description: "Luna es muy cariñosa y se lleva bien con niños.", health: "Vacunada", imageUrl: "/images/cat_placeholder_2.jpg" },
-    { id: '4', name: "Canela", gender: "Macho", age: "3 meses", description: "Canela es un cachorro pequeño y juguetón.", health: "Primeras vacunas", imageUrl: "/images/dog_placeholder_2.jpg" },
-    { id: '5', name: "Roco", gender: "Macho", age: "5 años", description: "Roco es tranquilo y le gusta pasar tiempo en casa.", health: "Vacunado", imageUrl: "/images/dog_placeholder_3.jpg" },
-  ];
+  const [formData, setFormData] = useState({
+    masNombre: "",
+    masRaza: "",
+    masNacimiento: "",
+    masSexo: "",
+    masTamaño: "",
+    masEstadoSalud: "",
+    masComportamiento: "",
+    masEsterilizado: false,
+    masEstado: "Disponible",
+    masTipo: "",
+    masImagen: "",
+  });
 
-  const handleSelectPet = (pet) => {
-    setSelectedPet(pet);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+    }));
   };
 
-  const handleEditPet = () => {
-    if (selectedPet) {
-      // Redirige a la página de añadir/editar mascota con el ID de la mascota
-      router.push(`/Refugio/agregarmascota?petId=${selectedPet.id}`);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
     }
   };
 
-  const handleAddPet = () => {
-    // Redirige a la página de añadir/editar mascota sin un ID (modo añadir)
-    router.push('/Refugio/agregarmascota');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      let imageUrl = "";
+
+      if (imageFile) {
+        imageUrl = await uploadToCloudinary(imageFile);
+      }
+
+      const mascotaData = {
+        ...formData,
+        masImagen: imageUrl,
+        masIdRefugio: user?.usuId,
+      };
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(mascotaData),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Error al guardar la mascota");
+      }
+
+      alert("Mascota registrada con éxito");
+      router.push("/Refugio");
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="manage-pets-container">
-      <h1 className="manage-pets-title">Administrar Mascotas</h1>
+    <div className="p-6 max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6">Registrar Nueva Mascota</h2>
 
-      <div className="manage-pets-grid">
-        {/* Columna izquierda: Lista de Mascotas */}
-        <div className="pets-list-section">
-          <h2 className="section-title">Nuestras Mascotas</h2>
-          {allPets.length > 0 ? (
-            <div className="pets-cards-container">
-              {allPets.map((pet) => (
-                <div
-                  key={pet.id} // Asegúrate de que la key es el id
-                  className={`pet-card-summary ${selectedPet && selectedPet.id === pet.id ? 'selected' : ''}`}
-                  onClick={() => handleSelectPet(pet)}
-                >
-                  <div className="pet-summary-photo-placeholder" style={{ backgroundImage: `url(${pet.imageUrl})` }}></div>
-                  <span className="pet-summary-name-text">{pet.name}</span>
-                  <span className="pet-summary-gender-text">{pet.gender}</span>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="no-pets-message">No hay mascotas registradas en el refugio.</p>
-          )}
-        </div>
-
-        <div className="pet-details-section">
-          {selectedPet ? (
-            <>
-              <div className="pet-details-actions-top">
-                <button className="icon-button check-button" title="Marcar como adoptado (placeholder)">
-                  <CheckButton />
-                </button>
-                <button className="icon-button edit-button" onClick={handleEditPet} title="Editar mascota">
-                  <EditDocumentIcon />
-                </button>
-                <button className="icon-button add-button" onClick={handleAddPet} title="Añadir nueva mascota">
-                  <AddSquareIcon />
-                </button>
-              </div>
-
-              <div className="pet-details-profile">
-                <div className="pet-details-photo-placeholder active" style={{ backgroundImage: `url(${selectedPet.imageUrl})` }}></div>
-                <div className="pet-details-header-info">
-                  <h2 className="pet-details-name-text">{selectedPet.name}</h2>
-                  <p className="pet-details-gender-age-text">{selectedPet.gender}, {selectedPet.age}</p>
-                </div>
-              </div>
-
-              <div className="pet-details-description-box">
-                <p className="box-text">{selectedPet.description}</p>
-                <p className="box-text">Salud: {selectedPet.health}</p>
-              </div>
-            </>
-          ) : (
-            <div className="no-pet-selected-message">
-              <p>Selecciona una mascota de la lista para ver sus detalles, o usa los iconos de arriba para añadir/gestionar.</p>
-              <button className="add-new-pet-button" onClick={handleAddPet}>Añadir Nueva Mascota</button>
-            </div>
-          )}
-        </div>
-      </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input name="masNombre" type="text" placeholder="Nombre" className="input input-bordered w-full" onChange={handleChange} required />
+        <input name="masRaza" type="text" placeholder="Raza" className="input input-bordered w-full" onChange={handleChange} />
+        <input name="masNacimiento" type="date" className="input input-bordered w-full" onChange={handleChange} required />
+        <select name="masSexo" className="select select-bordered w-full" onChange={handleChange} required>
+          <option value="">Sexo</option>
+          {enumOptions.masSexo.map((op) => <option key={op}>{op}</option>)}
+        </select>
+        <select name="masTamaño" className="select select-bordered w-full" onChange={handleChange} required>
+          <option value="">Tamaño</option>
+          {enumOptions.masTamaño.map((op) => <option key={op}>{op}</option>)}
+        </select>
+        <input name="masEstadoSalud" type="text" placeholder="Estado de salud" className="input input-bordered w-full" onChange={handleChange} />
+        <select name="masComportamiento" className="select select-bordered w-full" onChange={handleChange} required>
+          <option value="">Comportamiento</option>
+          {enumOptions.masComportamiento.map((op) => <option key={op}>{op}</option>)}
+        </select>
+        <select name="masTipo" className="select select-bordered w-full" onChange={handleChange} required>
+          <option value="">Tipo de mascota</option>
+          {enumOptions.masTipo.map((op) => <option key={op}>{op}</option>)}
+        </select>
+        <label className="label cursor-pointer">
+          <span className="label-text">¿Está esterilizado?</span>
+          <input type="checkbox" name="masEsterilizado" className="checkbox" onChange={handleChange} />
+        </label>
+        <input type="file" accept="image/*" onChange={handleImageChange} className="file-input file-input-bordered w-full" />
+        <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+          {loading ? "Guardando..." : "Registrar Mascota"}
+        </button>
+      </form>
     </div>
   );
-}
+};
+
+export default AgregarMascota;
