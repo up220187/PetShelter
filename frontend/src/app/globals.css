@@ -3014,3 +3014,27 @@ html, body {
       flex-direction: column;
   }
 }
+
+/* Estilos para formularios de administración */
+.admin-form-input {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  color: #374151;
+  line-height: 1.25;
+  outline: none;
+}
+
+.admin-form-input:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+  border-color: #2563eb;
+}
+
+.admin-form-input:disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  cursor: not-allowed;
+}

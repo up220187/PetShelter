@@ -58,6 +58,7 @@ const SolicitudAdopcionSchema = new mongoose.Schema({
     
     solEstado: { 
         type: String, 
+        enum: ["Pendiente", "Aprobada", "Rechazada"],
         alias: "T_SolEstado"
     },
     
