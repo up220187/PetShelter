@@ -1,11 +1,11 @@
 import React from "react";
 
-interface AdministrarVisitasButtonProps {
+interface AdministrarSeguimientoButtonProps {
   className?: string;
   onClick?: () => void;
 }
 
-export default function AdministrarVisitasButton({ className = "", onClick }: AdministrarVisitasButtonProps) {
+export default function AdministrarSeguimientoButton({ className = "", onClick }: AdministrarSeguimientoButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -21,7 +21,7 @@ export default function AdministrarVisitasButton({ className = "", onClick }: Ad
       `}
       style={{ fontFamily: 'Lato, sans-serif' }}
     >
-      Administrar visitas
+      Administrar seguimiento
     </button>
   );
 }

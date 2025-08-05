@@ -8,8 +8,9 @@ import { useAuth } from "../context/AuthContext";
 
 import AdministrarMascotasButton from "../components/Refugio/AdministrarMascotas";
 import ConfirmarAdopcionesButton from "../components/Refugio/confirmarAdopciones";
-import AdministrarSolicitudesButton from "../components/Refugio/AdministrarVisitas";
+import AdministrarVisitasButton from "../components/Refugio/AdministrarVisitas";
 import AdministrarRefugioButton from "../components/Refugio/AdministrarRefugio";
+import AdministrarSeguimientoButton from "../components/Refugio/AdministrarSeguimiento";
 
 export default function ShelterDashboardLayout({
   children,
@@ -52,8 +53,11 @@ export default function ShelterDashboardLayout({
             <Link href="/Refugio/confirmaradopciones">
               <ConfirmarAdopcionesButton />
             </Link>
-            <Link href="/Refugio/administrarsolicitudes">
-              <AdministrarSolicitudesButton />
+            <Link href="/Refugio/administrarvisitas">
+              <AdministrarVisitasButton />
+            </Link>
+            <Link href="/Refugio/administrarseguimiento">
+              <AdministrarSeguimientoButton />
             </Link>
             <Link href="/Refugio/administrarrefugio">
               <AdministrarRefugioButton />
