@@ -77,8 +77,8 @@ exports.obtenerVisitas = async (req, res) => {
     const visitas = await Visita.find()
       .populate('visIdUsuario')
       .populate('visIdMascota')
-      .populate('visIdRefugio');
-    res.json(visitas);
+    res.json(visitas);borrarVisita
+
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener visitas' });
   }
@@ -255,5 +255,25 @@ exports.borrarVisita = async (req, res) => {
     res.json({ message: 'Visita eliminada exitosamente' });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+exports.obtenerHorasOcupadas = async (req, res) => {
+  try {
+    const { idMascota, fecha } = req.params;
+    const fechaInicio = new Date(fecha);
+    const fechaFin = new Date(fecha);
+    fechaFin.setDate(fechaFin.getDate() + 1);
+
+    const visitas = await Visita.find({
+      visIdMascota: idMascota,
+      visFechaVisita: { $gte: fechaInicio, $lt: fechaFin },
+      visEstadoVisita: { $ne: "Cancelada" } // solo válidas
+    });
+
+    const horasOcupadas = visitas.map(v => v.visHoraVisita);
+    res.json(horasOcupadas);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener horas ocupadas' });
   }
 };
