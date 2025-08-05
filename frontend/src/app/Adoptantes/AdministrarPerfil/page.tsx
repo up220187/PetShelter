@@ -118,17 +118,6 @@ export default function AdoptanteProfilePage() {
         </div>
 
         {/* Información adicional */}
-        <div className="profile-additional-info-section">
-          <h2 className="section-title">Información Adicional</h2>
-          <textarea
-            name="extra"
-            className="profile-textarea"
-            rows={4}
-            value={formData.extra}
-            onChange={handleChange}
-            placeholder="Ej. experiencia con mascotas, espacio disponible, etc."
-          ></textarea>
-        </div>
       </div>
 
       {/* Botones */}
