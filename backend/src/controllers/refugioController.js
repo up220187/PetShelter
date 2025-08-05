@@ -59,6 +59,24 @@ exports.obtenerRefugios = async (req, res) => {
   }
 };
 
+
+
+exports.obtenerRefugioPorUsuario = async (req, res) => {
+  try {
+    const { idUsuario } = req.params;
+    const refugio = await Refugio.findOne({ refIdUsuario: idUsuario });
+
+    if (!refugio) {
+      return res.status(404).json({ mensaje: "Refugio no encontrado para este usuario." });
+    }
+
+    res.json(refugio);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al obtener refugio." });
+  }
+};
+
 /**
  * @swagger
  * /refugios/{id}:
