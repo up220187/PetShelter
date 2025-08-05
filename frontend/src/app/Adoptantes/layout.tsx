@@ -1,4 +1,3 @@
-// src/app/dashboard/adoptante/layout.tsx
 "use client";
 
 import React, { useEffect } from "react";
@@ -6,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search as SearchIcon, FilterList as FilterIcon } from "@mui/icons-material";
 
-// ¡Importa el useAuth hook de tu AuthProvider!
 import { useAuth } from "../context/AuthContext";
 
 import VerMascotasButton from "../components/Adoptante/VerMascotas";
@@ -16,17 +14,15 @@ import AdministrarPerfilButton from "../components/Adoptante/AdministrarPerfil";
 
 export default function AdoptanteLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { logout } = useAuth(); // Usar el logout del contexto
+  const { logout } = useAuth(); 
 
   const handleLogout = () => {
-    logout(); // Llama a la función logout del contexto
+    logout(); 
     console.log('Sesión cerrada. Redirigiendo al login.');
     router.push('/login');
   };
 
-  // Efecto para verificar el estado de la autenticación al cargar el componente
   useEffect(() => {
-    // AHORA LEE "authToken"
     const token = localStorage.getItem('authToken');
     if (!token) {
       console.log('Layout: No se encontró authToken de sesión en localStorage. Redirigiendo al login.');
@@ -64,7 +60,6 @@ export default function AdoptanteLayout({ children }: { children: React.ReactNod
             <Link href="/Adoptantes/AdministrarPerfil">
               <AdministrarPerfilButton />
             </Link>
-            {/* Botón de Logout para Adoptante */}
             <button
               onClick={handleLogout}
               className="logout-button"

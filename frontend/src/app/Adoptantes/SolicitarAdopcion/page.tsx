@@ -31,12 +31,12 @@ export default function SolicitarAdopcionPage() {
 
   return (
     <div className="adoption-form-page-container">
-      <h1 className="form-page-title">Solicitar Adopción</h1>
+      <h1 className="form-page-title">Solicitar Visita</h1>
 
       <div className="adoption-form-container">
         <div className="form-header">
           <h3 className="form-title-adopcion">
-            Formulario de Adopción para {petName || 'una mascota'}
+            Formulario de Visita para {petName || 'una mascota'}
           </h3>
           {/* Aquí podrías añadir un botón para regresar, si lo deseas */}
         </div>
