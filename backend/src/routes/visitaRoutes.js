@@ -9,7 +9,6 @@ router.post('/', [
     authMiddleware,
     body('visIdUsuario').notEmpty().isMongoId().withMessage('El ID de usuario es obligatorio y debe ser un ObjectId válido'),
     body('visIdMascota').notEmpty().isMongoId().withMessage('El ID de la mascota es obligatorio y debe ser un ObjectId válido'),
-    body('visIdRefugio').notEmpty().isMongoId().withMessage('El ID del refugio es obligatorio y debe ser un ObjectId válido'),
     body('visFechaVisita').notEmpty().isISO8601().withMessage('La fecha de visita debe ser una fecha válida'),
     body('visHoraVisita').notEmpty().withMessage('La hora de visita es obligatoria'),
     body('visEstadoVisita').notEmpty().withMessage('El estado de la visita es obligatorio'),
@@ -35,5 +34,9 @@ router.delete('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido')
 ], validate, visitaController.borrarVisita);
+
+
+// GET /visitas/ocupadas/:idMascota/:fecha
+router.get('/ocupadas/:idMascota/:fecha', authMiddleware, visitaController.obtenerHorasOcupadas);
 
 module.exports = router;
