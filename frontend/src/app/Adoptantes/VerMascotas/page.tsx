@@ -1,3 +1,4 @@
+// src/app/dashboard/customer/solicitar-adopcion/page.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -28,7 +29,7 @@ export default function ViewPetsPage() {
 
   useEffect(() => {
     if (isLoading) return; // Esperar a que termine de cargar
-    
+
     if (!token) {
       console.error('No hay token de autenticación');
       return;
@@ -68,7 +69,17 @@ export default function ViewPetsPage() {
 
   const handleSolicitarVisitaClick = () => {
     if (selectedPet) {
-      router.push(`/Adoptantes/SolicitarAdopcion?petId=${selectedPet._id}`);
+      // Assuming 'solicitar-visita' is the correct page for visit requests
+      router.push(`/dashboard/customer/solicitar-visita?petId=${selectedPet._id}&petName=${selectedPet.masNombre}`);
+    }
+  };
+
+  // NEW: Handler for the "Solicitar Adopción" button
+  const handleSolicitarAdopcionClick = () => {
+    if (selectedPet) {
+      // Assuming 'solicitar-adopcion' is the correct page for adoption requests
+      // Make sure the path is correct based on your file structure
+      router.push(`/dashboard/customer/solicitar-adopcion?petId=${selectedPet._id}&petName=${selectedPet.masNombre}`);
     }
   };
 
@@ -119,7 +130,7 @@ export default function ViewPetsPage() {
                       backgroundImage: `url(${selectedPet.masImagen || "/images/pet_placeholder.jpg"})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
-                      borderRadius: "9999px", // círculo
+                      borderRadius: "9999px", 
                     }}
                   ></div>
                   <div className="pet-details-basic-info">
@@ -138,6 +149,9 @@ export default function ViewPetsPage() {
                 <div className="pet-details-actions">
                   <button className="solicitar-visita-button" onClick={handleSolicitarVisitaClick}>
                     Solicitar Visita
+                  </button>
+                  <button className="solicitar-adopcion-button" onClick={handleSolicitarAdopcionClick}>
+                    Solicitar Adopción
                   </button>
                 </div>
               </>

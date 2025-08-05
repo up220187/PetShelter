@@ -39,6 +39,9 @@ const Schema = mongoose.Schema;
  *           type: string
  *           enum: [adoptante, refugio]
  *           description: Rol del usuario dentro de la plataforma.
+ *         usuFotoPerfil:
+ *           type: string
+ *           description: URL de la foto de perfil del usuario.
  *       example:
  *         usuNombre: "Ana Pérez"
  *         usuCorreo: "ana.perez@example.com"
@@ -47,6 +50,7 @@ const Schema = mongoose.Schema;
  *         usuEstado: "Activo"
  *         usuDireccion: "Av. Libertad #321"
  *         usuRol: "adoptante"
+ *         usuFotoPerfil: "https://example.com/foto-perfil.jpg"
  */
 const UsuarioSchema = new Schema({
     usuNombre: { 
@@ -86,7 +90,13 @@ const UsuarioSchema = new Schema({
         type: String,
         values: ['adoptante', 'refugio'],
         alias: "T_UsuRol",
-    }
+    },
+
+    usuFotoPerfil: {
+        type: String,
+        alias: "T_UsuFotoPerfil"
+}
+
 });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema, "T_Usuario");

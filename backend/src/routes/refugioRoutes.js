@@ -20,6 +20,11 @@ router.get('/', [
     query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer')
 ], validate, refugioController.obtenerRefugios);
 
+router.get('/usuario/:idUsuario', [
+  authMiddleware,
+  param('idUsuario').isMongoId().withMessage('El ID de usuario debe ser válido')
+], validate, refugioController.obtenerRefugioPorUsuario);
+
 router.put('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido'),
