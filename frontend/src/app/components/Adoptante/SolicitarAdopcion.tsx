@@ -21,7 +21,7 @@ export default function SolicitarAdopcionButton({ className = "", onClick }: Sol
       `}
       style={{ fontFamily: 'Lato, sans-serif' }}
     >
-      Solicitar adopción
+      Solicitar visita
     </button>
   );
 }
