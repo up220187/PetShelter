@@ -17,7 +17,6 @@ const Schema = mongoose.Schema;
  *         - masComportamiento
  *         - masEsterilizado
  *         - masTipo
- *         - masIdRefugio
  *       properties:
  *         masNombre:
  *           type: string
@@ -57,10 +56,6 @@ const Schema = mongoose.Schema;
  *         masImagen:
  *           type: object
  *           description: Imagen o galería (puede ser mixto).
- *         masIdRefugio:
- *           type: string
- *           format: uuid
- *           description: ID del refugio al que pertenece.
  *       example:
  *         masNombre: "Fido"
  *         masRaza: "Labrador"
@@ -73,7 +68,6 @@ const Schema = mongoose.Schema;
  *         masEstado: "Disponible"
  *         masTipo: "Perro"
  *         masImagen: { url: "https://example.com/fido.jpg" }
- *         masIdRefugio: "60a7c5f7f1d2c731d8f8c123"
  */
 const MascotaSchema = new Schema({
     masNombre: {
@@ -144,13 +138,6 @@ const MascotaSchema = new Schema({
     masImagen: {
         type: mongoose.Schema.Types.Mixed, //! Corregir
         alias: "T_MasImagen"
-    },
-
-    masIdRefugio: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Refugio",
-        alias: "T_MasIdRefugio",
-        required: true
     }
 });
 

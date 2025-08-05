@@ -13,6 +13,9 @@ router.post(
             .notEmpty()
             .isLength({ max: 50 })
             .withMessage("El nombre es obligatorio"),
+        body("masRaza")
+            .notEmpty()
+            .withMessage("La raza es obligatoria"),
         body("masNacimiento")
             .notEmpty()
             .isISO8601().withMessage("La fecha de nacimiento debe estar en formato YYYY-MM-DD"),
@@ -39,18 +42,15 @@ router.post(
             .notEmpty()
             .isIn(["Perro", "Gato", "Ave", "Reptil", "Roedor", "Otro"])
             .withMessage("El tipo de mascota es obligatorio y debe ser válido"),
-        body("masIdRefugio")
-            .notEmpty()
-            .isMongoId().withMessage("El ID del refugio debe ser un ObjectId válido"),
     ],
     validate,
     mascotaController.crearMascota
 );
-
+ 
 router.get(
     "/",
     [
-    (authMiddleware,
+        authMiddleware,
         query("page")
             .optional()
             .isInt({ min: 1 })
@@ -58,7 +58,7 @@ router.get(
         query("limit")
             .optional()
             .isInt({ min: 1 })
-            .withMessage("Limit must be a positive integer"))
+            .withMessage("Limit must be a positive integer")
     ],
     validate,
     mascotaController.obtenerMascotas
@@ -86,6 +86,9 @@ router.put(
             .notEmpty()
             .isLength({ max: 50 })
             .withMessage("El nombre es obligatorio"),
+        body("masRaza")
+            .notEmpty()
+            .withMessage("La raza es obligatoria"),
         body("masNacimiento")
             .notEmpty()
             .isISO8601().withMessage("La fecha de nacimiento debe estar en formato YYYY-MM-DD"),
@@ -112,9 +115,6 @@ router.put(
             .notEmpty()
             .isIn(["Perro", "Gato", "Ave", "Reptil", "Roedor", "Otro"])
             .withMessage("El tipo de mascota es obligatorio y debe ser válido"),
-        body("masIdRefugio")
-            .notEmpty()
-            .isMongoId().withMessage("El ID del refugio debe ser un ObjectId válido"),
     ],
     validate,
     mascotaController.actualizarMascotaPorId
