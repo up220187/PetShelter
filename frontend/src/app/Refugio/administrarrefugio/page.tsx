@@ -2,8 +2,49 @@
 "use client";
 
 import Link from "next/link";
+import React, { useEffect } from "react"; // Importa useEffect
+import { useRouter } from "next/navigation"; // Importa useRouter
+import { useAuth } from "../../context/AuthContext"; // Asegúrate de la ruta correcta a tu AuthContext
 
 export default function CreateShelterPage() {
+  const { user, token, isLoading } = useAuth(); // Obtén user, token, e isLoading del contexto
+  const router = useRouter(); // Inicializa el router
+
+  // Efecto para verificar la autenticación
+  useEffect(() => {
+    // Si isLoading es true, significa que el contexto aún está intentando cargar el token de localStorage.
+    // Esperamos a que termine antes de decidir si redirigir.
+    if (isLoading) {
+      return;
+    }
+
+    // Si isLoading es false y no hay token, significa que el usuario no está autenticado.
+    if (!token) {
+      console.log('CreateShelterPage: No se encontró authToken de sesión. Redirigiendo al login.');
+      router.push('/login');
+    }
+    // Opcional: Si solo ciertos roles pueden acceder a esta página, podrías añadir:
+    // if (user && user.usuRol !== 'refugio') {
+    //   router.push('/unauthorized'); // o a otra página adecuada
+    // }
+  }, [token, isLoading, router]); // Dependencias del efecto: re-evaluar si token, isLoading, o router cambian
+
+  // Mostrar un mensaje de carga mientras se verifica la autenticación
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Cargando información de autenticación...</p>
+      </div>
+    );
+  }
+
+  // Si no hay token después de que la carga ha terminado, no se renderiza el formulario
+  // (el useEffect ya habrá disparado la redirección)
+  if (!token) {
+    return null; // O podrías renderizar un mensaje de "Acceso Denegado"
+  }
+
+  // Si el usuario está autenticado, renderiza el contenido original de la página
   return (
     <div className="create-shelter-container">
       <h1 className="shelter-title">Administrar Refugio</h1>

@@ -1,12 +1,16 @@
+// src/app/dashboard/shelter/AddPetPage/page.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useAuth } from "../../context/AuthContext"; // Asegúrate de la ruta correcta a tu AuthContext
 
 export default function AddPetPage() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // Hook para leer parámetros de la URL
-  const petId = searchParams.get('petId'); // Obtener el ID de la mascota de la URL
+  const searchParams = useSearchParams();
+  const petId = searchParams.get('petId');
+
+  const { user, token, isLoading } = useAuth(); // Obtén user, token, e isLoading del contexto
 
   // Simulación de datos de mascotas (deberías obtenerlos de tu backend)
   const allPets = [
@@ -26,8 +30,29 @@ export default function AddPetPage() {
     imageUrl: ''
   });
 
-  // useEffect para cargar datos si estamos en modo edición
+  // Efecto para verificar la autenticación
   useEffect(() => {
+    // Si isLoading es true, significa que el contexto aún está intentando cargar el token de localStorage.
+    // Esperamos a que termine antes de decidir si redirigir.
+    if (isLoading) {
+      return;
+    }
+
+    // Si isLoading es false y no hay token, significa que el usuario no está autenticado.
+    if (!token) {
+      console.log('AddPetPage: No se encontró authToken de sesión. Redirigiendo al login.');
+      router.push('/login');
+      return; // Detener la ejecución si no hay token
+    }
+
+    // Opcional: Si solo los refugios pueden acceder a esta página
+    if (user && user.usuRol !== 'refugio') {
+      console.log('AddPetPage: Usuario no autorizado. Rol:', user.usuRol);
+      router.push('/unauthorized'); // O a otra página adecuada, como el dashboard del adoptante
+      return;
+    }
+
+    // Cargar datos si estamos en modo edición, SOLO DESPUÉS DE LA AUTENTICACIÓN
     if (petId) {
       const petToEdit = allPets.find(pet => pet.id === petId);
       if (petToEdit) {
@@ -41,12 +66,11 @@ export default function AddPetPage() {
           imageUrl: petToEdit.imageUrl
         });
       } else {
-        // Opcional: manejar caso donde no se encuentra la mascota
         alert("Mascota no encontrada para editar.");
         router.push('/Refugio/administrarmascotas');
       }
     }
-  }, [petId, router]);
+  }, [petId, router, token, isLoading, user]); // Añadir token, isLoading, y user a las dependencias
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -55,20 +79,42 @@ export default function AddPetPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Re-verificar token antes de enviar el formulario, por si acaso
+    if (!token) {
+      alert("No estás autenticado. Por favor, inicia sesión.");
+      router.push('/login');
+      return;
+    }
+
     if (petId) {
       console.log("Mascota a actualizar (ID:", petId, "):", formData);
       alert(`Mascota "${formData.name}" actualizada exitosamente (simulado).`);
     } else {
-
       console.log("Nueva mascota a agregar:", formData);
       alert(`Mascota "${formData.name}" agregada exitosamente (simulado).`);
     }
-    router.push('/Refugio/administrarmascotas'); 
+    router.push('/Refugio/administrarmascotas');
   };
 
   const handleCancel = () => {
     router.push('/Refugio/administrarmascotas');
   };
+
+  // Mostrar un mensaje de carga mientras se verifica la autenticación
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Cargando información de autenticación...</p>
+      </div>
+    );
+  }
+
+  // Si no hay token o el rol no es 'refugio' después de que la carga ha terminado,
+  // no se renderiza el formulario (el useEffect ya habrá disparado la redirección)
+  if (!token || (user && user.usuRol !== 'refugio')) {
+    return null; // O podrías renderizar un mensaje de "Acceso Denegado" aquí si lo prefieres.
+  }
 
   return (
     <div className="add-pet-page-container">

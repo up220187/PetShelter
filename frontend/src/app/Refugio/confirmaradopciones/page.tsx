@@ -1,10 +1,16 @@
+// src/app/dashboard/shelter/ConfirmAdoptionsPage/page.tsx
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Importa useEffect
+import { useRouter } from "next/navigation"; // Importa useRouter
+import { useAuth } from "../../context/AuthContext"; // Asegúrate de la ruta correcta a tu AuthContext
 import CheckButton from '../../components/icon/CheckButton';
 import CloseCircleIcon from '../../components/icon/CloseCircleIcon';
 
 export default function ConfirmAdoptionsPage() {
+  const { user, token, isLoading } = useAuth(); // Obtén user, token, e isLoading del contexto
+  const router = useRouter(); // Inicializa el router
+
   // Estado para el solicitante de adopción actualmente seleccionado
   const [selectedApplicant, setSelectedApplicant] = useState(null);
 
@@ -17,6 +23,30 @@ export default function ConfirmAdoptionsPage() {
     { id: 5, name: "Óscar Miranda", age: 40, email: "oscar.miranda@email.com", description: "Familia con niños, busca un perro amigable.", allergies: "Ninguna.", imageUrl: "/images/oscar_miranda.jpg" },
   ];
 
+  // Efecto para verificar la autenticación y el rol del usuario
+  useEffect(() => {
+    // Si isLoading es true, significa que el contexto aún está intentando cargar el token de localStorage.
+    // Esperamos a que termine antes de decidir si redirigir.
+    if (isLoading) {
+      return;
+    }
+
+    // Si isLoading es false y no hay token, significa que el usuario no está autenticado.
+    if (!token) {
+      console.log('ConfirmAdoptionsPage: No se encontró authToken de sesión. Redirigiendo al login.');
+      router.push('/login');
+      return; // Detener la ejecución si no hay token
+    }
+
+    // Si hay token pero el rol no es 'refugio', redirigir o mostrar mensaje de acceso denegado
+    if (user && user.usuRol !== 'refugio') {
+      console.log('ConfirmAdoptionsPage: Usuario no autorizado. Rol:', user.usuRol);
+      // Podrías redirigir a una página de "Acceso Denegado" o al dashboard principal
+      router.push('/unauthorized'); // Crea una página para manejar esto o redirige a otro lado
+    }
+  }, [token, isLoading, user, router]); // Dependencias del efecto: re-evaluar si token, isLoading, user o router cambian
+
+
   // Función para seleccionar un solicitante
   const handleSelectApplicant = (applicant) => {
     setSelectedApplicant(applicant);
@@ -24,6 +54,11 @@ export default function ConfirmAdoptionsPage() {
 
   // Funciones para manejar la confirmación o rechazo (lógica de backend iría aquí)
   const handleConfirmAdoption = () => {
+    if (!token) { // Verificar token antes de la acción
+      alert("No estás autenticado. Por favor, inicia sesión.");
+      router.push('/login');
+      return;
+    }
     if (selectedApplicant) {
       alert(`Adopción de ${selectedApplicant.name} confirmada!`);
       // Lógica para actualizar el estado en el backend
@@ -32,12 +67,32 @@ export default function ConfirmAdoptionsPage() {
   };
 
   const handleRejectAdoption = () => {
+    if (!token) { // Verificar token antes de la acción
+      alert("No estás autenticado. Por favor, inicia sesión.");
+      router.push('/login');
+      return;
+    }
     if (selectedApplicant) {
       alert(`Adopción de ${selectedApplicant.name} rechazada.`);
       // Lógica para actualizar el estado en el backend
       setSelectedApplicant(null); // Deseleccionar después de confirmar/rechazar
     }
   };
+
+  // Mostrar un mensaje de carga mientras se verifica la autenticación
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Cargando información de autenticación...</p>
+      </div>
+    );
+  }
+
+  // Si no hay token o el rol no es 'refugio' después de que la carga ha terminado,
+  // no se renderiza el formulario (el useEffect ya habrá disparado la redirección)
+  if (!token || (user && user.usuRol !== 'refugio')) {
+    return null; // O podrías renderizar un mensaje de "Acceso Denegado" aquí si lo prefieres antes de la redirección.
+  }
 
   return (
     <div className="confirm-adoptions-container">
