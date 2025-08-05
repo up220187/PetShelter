@@ -54,8 +54,8 @@ const Schema = mongoose.Schema;
  *           enum: [Perro, Gato, Ave, Reptil, Roedor, Otro]
  *           description: Tipo de mascota.
  *         masImagen:
- *           type: object
- *           description: Imagen o galería (puede ser mixto).
+ *           type: string
+ *           description: URL de la imagen de la mascota.
  *       example:
  *         masNombre: "Fido"
  *         masRaza: "Labrador"
@@ -67,7 +67,7 @@ const Schema = mongoose.Schema;
  *         masEsterilizado: true
  *         masEstado: "Disponible"
  *         masTipo: "Perro"
- *         masImagen: { url: "https://example.com/fido.jpg" }
+ *         masImagen: "https://example.com/fido.jpg"
  */
 const MascotaSchema = new Schema({
     masNombre: {
@@ -136,7 +136,7 @@ const MascotaSchema = new Schema({
     },
 
     masImagen: {
-        type: mongoose.Schema.Types.Mixed, //! Corregir
+        type: String, 
         alias: "T_MasImagen"
     }
 });
