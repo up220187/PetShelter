@@ -12,7 +12,6 @@ interface Mascota {
   masNombre: string;
   masSexo: string;
   masImagen?: string;
-  masIdRefugio: string;
   masRaza?: string;
   masNacimiento?: string;
   masTamaño?: string;
@@ -24,7 +23,7 @@ interface Mascota {
 }
 
 export default function AdministrarMascotas() {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const router = useRouter();
 
   const [mascotas, setMascotas] = useState<Mascota[]>([]);
@@ -40,22 +39,38 @@ export default function AdministrarMascotas() {
     masEstadoSalud: "",
     masRaza: "",
     masNacimiento: "",
-    masIdRefugio: user?.usuId || "",
     masImagen: "",
   });
 
-  // Cargar mascotas del refugio
-  useEffect(() => {
-    if (!token || !user?.usuId) return;
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
-      headers: { Authorization: `Bearer ${token}` },
+  // ✅ Obtener todas las mascotas (sin token)
+// ✅ Obtener todas las mascotas (requiere token)
+useEffect(() => {
+  if (!token) return; // Solo si hay token
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // ✅ token necesario
+    },
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return res.json();
     })
-      .then((res) => res.json())
-      .then((data) => {
-        const delRefugio = data.filter((m: Mascota) => m.masIdRefugio === user.usuId);
-        setMascotas(delRefugio);
-      });
-  }, [token, user]);
+    .then(data => {
+      if (Array.isArray(data)) {
+        setMascotas(data);
+      } else {
+        console.error('La respuesta no es un array:', data);
+        setMascotas([]);
+      }
+    })
+    .catch(err => {
+      console.error("Error al obtener mascotas:", err);
+      setMascotas([]);
+    });
+    console.log("TOKEN en useEffect:", token);
+}, [token]);
+
 
   const resetForm = () => {
     setFormData({
@@ -69,7 +84,6 @@ export default function AdministrarMascotas() {
       masEstadoSalud: "",
       masRaza: "",
       masNacimiento: "",
-      masIdRefugio: user?.usuId || "",
       masImagen: "",
     });
     setSelectedPet(null);
@@ -96,6 +110,7 @@ export default function AdministrarMascotas() {
       alert("Error al subir imagen");
     }
   };
+console.log("TOKEN:", token);
 
   const handleSelect = (pet: Mascota) => {
     setSelectedPet(pet);
@@ -109,7 +124,7 @@ export default function AdministrarMascotas() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mascotas/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
 
       if (!res.ok) throw new Error();
@@ -131,7 +146,7 @@ export default function AdministrarMascotas() {
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify(formData),
       });
@@ -140,7 +155,6 @@ export default function AdministrarMascotas() {
       const saved = await res.json();
       alert(`Mascota ${selectedPet ? "actualizada" : "registrada"} correctamente`);
 
-      // Refrescar lista
       if (selectedPet) {
         setMascotas((prev) => prev.map((m) => (m._id === saved._id ? saved : m)));
       } else {
@@ -157,7 +171,17 @@ export default function AdministrarMascotas() {
     <div className="flex p-6 gap-6 bg-gray-50 min-h-screen">
       {/* Lista de mascotas */}
       <div className="w-1/3 bg-white rounded-lg shadow p-4 overflow-y-auto max-h-[90vh]">
-        <h2 className="text-xl font-bold mb-4">Mascotas Registradas</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Mascotas Registradas</h2>
+          <button
+            onClick={resetForm}
+            className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-md transition"
+            title="Registrar nueva mascota"
+          >
+            <span className="text-xl leading-none">＋</span> Nueva
+          </button>
+        </div>
+
         {mascotas.length ? (
           <ul className="space-y-4">
             {mascotas.map((pet) => (

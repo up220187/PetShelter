@@ -50,7 +50,7 @@ router.post(
 router.get(
     "/",
     [
-        authMiddleware,
+        authMiddleware,   
         query("page")
             .optional()
             .isInt({ min: 1 })
@@ -67,7 +67,7 @@ router.get(
 router.get(
     "/:id",
     [
-        authMiddleware,
+        
         param("id")
             .isMongoId()
             .withMessage("El ID debe ser un ID de MongoDB válido"),
@@ -78,7 +78,6 @@ router.get(
 router.put(
     "/:id",
     [
-        authMiddleware,
         param("id")
             .isMongoId()
             .withMessage("El ID debe ser un ID de MongoDB válido"),
@@ -123,7 +122,7 @@ router.put(
 router.delete(
     "/:id",
     [
-        authMiddleware,
+        
         param("id")
             .isMongoId()
             .withMessage("El ID debe ser un ID de MongoDB válido"),

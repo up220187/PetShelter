@@ -1,5 +1,7 @@
+// src/app/layout.tsx
+
 import type { Metadata } from "next";
-import { AuthProvider } from "./context/AuthContext"; // Ajusta la ruta según la ubicación real del archivo
+import { AuthProvider } from "./context/AuthContext"; // ✅ Ruta corregida
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
