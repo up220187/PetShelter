@@ -1,112 +1,201 @@
-// src/app/register/shelter/page.tsx
 "use client";
 
-import Link from "next/link";
-import React, { useEffect } from "react"; // Importa useEffect
-import { useRouter } from "next/navigation"; // Importa useRouter
-import { useAuth } from "../../context/AuthContext"; // Asegúrate de la ruta correcta a tu AuthContext
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { getUsuarioPorId, actualizarUsuario } from "../../services/usuarioService";
+import { getRefugioPorIdUsuario, actualizarRefugio } from "../../services/refugioService";
+import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 
-export default function CreateShelterPage() {
-  const { user, token, isLoading } = useAuth(); // Obtén user, token, e isLoading del contexto
-  const router = useRouter(); // Inicializa el router
+export default function AdminRefugioPage() {
+  const { user, token } = useAuth();
 
-  // Efecto para verificar la autenticación
+  const [formData, setFormData] = useState({
+    // Usuario
+    usuCorreo: "",
+    usuTelefono: "",
+    usuFotoPerfil: "",
+    // Refugio
+    refNombre: "",
+    refDescripcion: "",
+    refDireccion: "",
+    refHorarioAtencion: "",
+    refId: "",
+  });
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    // Si isLoading es true, significa que el contexto aún está intentando cargar el token de localStorage.
-    // Esperamos a que termine antes de decidir si redirigir.
-    if (isLoading) {
-      return;
+    if (!user || !token) return;
+
+    const cargarDatos = async () => {
+      try {
+        const datosUsuario = await getUsuarioPorId(user.usuId, token);
+        const datosRefugio = await getRefugioPorIdUsuario(user.usuId, token);
+
+        setFormData({
+          usuCorreo: datosUsuario.usuCorreo || "",
+          usuTelefono: datosUsuario.usuTelefono || "",
+          usuFotoPerfil: datosUsuario.usuFotoPerfil || "",
+          refNombre: datosRefugio.refNombre || "",
+          refDescripcion: datosRefugio.refDescripcion || "",
+          refDireccion: datosRefugio.refDireccion || "",
+          refHorarioAtencion: datosRefugio.refHorarioAtencion || "",
+          refId: datosRefugio._id || "",
+        });
+
+        setImagePreview(datosUsuario.usuFotoPerfil || null);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error al cargar datos:", err);
+        setLoading(false);
+      }
+    };
+
+    cargarDatos();
+  }, [user, token]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const url = await uploadToCloudinary(file);
+      setFormData((prev) => ({ ...prev, usuFotoPerfil: url }));
+      setImagePreview(url);
+    } catch {
+      alert("Error al subir la imagen a Cloudinary");
     }
+  };
 
-    // Si isLoading es false y no hay token, significa que el usuario no está autenticado.
-    if (!token) {
-      console.log('CreateShelterPage: No se encontró authToken de sesión. Redirigiendo al login.');
-      router.push('/login');
+  const handleSave = async () => {
+    if (!user || !token) return;
+
+    try {
+      // 1. Actualizar usuario
+      await actualizarUsuario(user.usuId, token, {
+        usuCorreo: formData.usuCorreo,
+        usuTelefono: formData.usuTelefono,
+        usuFotoPerfil: formData.usuFotoPerfil,
+      });
+
+      // 2. Actualizar refugio
+      await actualizarRefugio(user.usuId, token, {
+        _id: formData.refId,
+        refNombre: formData.refNombre,
+        refDescripcion: formData.refDescripcion,
+        refDireccion: formData.refDireccion,
+        refHorarioAtencion: formData.refHorarioAtencion,
+        refIdUsuario: user.usuId,
+      });
+
+      alert("Información del refugio actualizada correctamente");
+    } catch (err) {
+      console.error("Error al guardar:", err);
+      alert("No se pudo actualizar el perfil");
     }
-    // Opcional: Si solo ciertos roles pueden acceder a esta página, podrías añadir:
-    // if (user && user.usuRol !== 'refugio') {
-    //   router.push('/unauthorized'); // o a otra página adecuada
-    // }
-  }, [token, isLoading, router]); // Dependencias del efecto: re-evaluar si token, isLoading, o router cambian
+  };
 
-  // Mostrar un mensaje de carga mientras se verifica la autenticación
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p>Cargando información de autenticación...</p>
-      </div>
-    );
-  }
+  if (loading) return <p className="text-center mt-10">Cargando datos del refugio...</p>;
 
-  // Si no hay token después de que la carga ha terminado, no se renderiza el formulario
-  // (el useEffect ya habrá disparado la redirección)
-  if (!token) {
-    return null; // O podrías renderizar un mensaje de "Acceso Denegado"
-  }
-
-  // Si el usuario está autenticado, renderiza el contenido original de la página
   return (
     <div className="create-shelter-container">
       <h1 className="shelter-title">Administrar Refugio</h1>
 
       <div className="shelter-grid">
-        {/* Sección de Logo/Imagen de perfil del Refugio (espacio en blanco) */}
+        {/* Imagen */}
         <div className="shelter-logo-section">
-          <div className="shelter-picture-empty"></div>
-          <input type="file" id="shelter-logo-upload" className="file-upload-input" />
-          <label htmlFor="shelter-logo-upload" className="file-upload-label">Subir Logo/Foto</label>
+          {imagePreview ? (
+            <img src={imagePreview} alt="Foto del refugio" className="profile-picture-preview" />
+          ) : (
+            <div className="profile-picture-empty"></div>
+          )}
+          <input type="file" id="shelter-logo-upload" className="file-upload-input" onChange={handleImageUpload} />
+          <label htmlFor="shelter-logo-upload" className="file-upload-label">Subir Foto del Refugio</label>
         </div>
 
-        {/* Sección de Descripción */}
+        {/* Nombre del Refugio */}
+        <div className="shelter-description-section">
+          <h2 className="section-title">Nombre del Refugio</h2>
+          <input
+            type="text"
+            name="refNombre"
+            className="profile-input"
+            value={formData.refNombre}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Descripción */}
         <div className="shelter-description-section">
           <h2 className="section-title">Descripción</h2>
           <textarea
-            id="shelter-description"
+            name="refDescripcion"
             className="profile-textarea"
-            rows={5}
-            placeholder="Cuéntanos sobre la misión de tu refugio, historia, tipo de animales que rescatan, etc."
-          ></textarea>
+            rows={4}
+            value={formData.refDescripcion}
+            onChange={handleChange}
+          />
         </div>
 
-        {/* Sección de Dirección (interpretando "Av. Independencia 123" como un campo de dirección) */}
+        {/* Dirección */}
         <div className="shelter-address-section">
           <h2 className="section-title">Dirección</h2>
           <input
             type="text"
-            id="shelter-address"
+            name="refDireccion"
             className="profile-input"
-            placeholder="Av. Ejemplo 123, Colonia, Ciudad, País"
+            value={formData.refDireccion}
+            onChange={handleChange}
           />
         </div>
 
-        {/* Sección de Contacto (al lado del logo en la imagen) */}
+        {/* Horario */}
+        <div className="shelter-address-section">
+          <h2 className="section-title">Horario de Atención</h2>
+          <input
+            type="text"
+            name="refHorarioAtencion"
+            className="profile-input"
+            value={formData.refHorarioAtencion}
+            onChange={handleChange}
+          />
+        </div>
+
+        {/* Contacto */}
         <div className="shelter-contact-section">
           <h2 className="section-title">Contacto</h2>
           <div className="input-group">
-            <label htmlFor="shelter-email" className="input-label">Email:</label>
-            <input type="email" id="shelter-email" className="profile-input" placeholder="correo@túrefugio.org" />
+            <label className="input-label">Email:</label>
+            <input
+              type="email"
+              name="usuCorreo"
+              className="profile-input"
+              value={formData.usuCorreo}
+              onChange={handleChange}
+            />
           </div>
           <div className="input-group">
-            <label htmlFor="shelter-phone" className="input-label">Teléfono:</label>
-            <input type="tel" id="shelter-phone" className="profile-input" placeholder="Ej: +52 55 1234 5678" />
+            <label className="input-label">Teléfono:</label>
+            <input
+              type="tel"
+              name="usuTelefono"
+              className="profile-input"
+              value={formData.usuTelefono}
+              onChange={handleChange}
+            />
           </div>
-        </div>
-
-        {/* Sección de Información Adicional (interpretando "Info add." como un campo de texto amplio) */}
-        <div className="shelter-additional-info-section">
-          <h2 className="section-title">Información Adicional</h2>
-          <textarea
-            id="shelter-additional-info"
-            className="profile-textarea"
-            rows={5}
-            placeholder="Horarios de visita, si aceptan voluntarios, requisitos especiales de adopción, etc."
-          ></textarea>
         </div>
       </div>
 
       <div className="profile-actions">
-        <button className="save-button">Guardar Cambios</button>
-        <button className="cancel-button">Cancelar</button>
+        <button className="save-button" onClick={handleSave}>Guardar Cambios</button>
+        <button className="cancel-button" onClick={() => window.location.reload()}>Cancelar</button>
       </div>
     </div>
   );
