@@ -1,11 +1,11 @@
 import React from "react";
 
-interface AdministrarvisitasButtonProps {
+interface AdministrarVisitasButtonProps {
   className?: string;
   onClick?: () => void;
 }
 
-export default function AdministrarvisitasButton({ className = "", onClick }: AdministrarvisitasButtonProps) {
+export default function AdministrarVisitasButton({ className = "", onClick }: AdministrarVisitasButtonProps) {
   return (
     <button
       onClick={onClick}

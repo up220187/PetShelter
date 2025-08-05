@@ -496,12 +496,9 @@ export default function AdministrarSolicitudes() {
                 </ul>
               </div>
 
-              <div className="col-span-2 flex justify-between">
+              <div className="col-span-2 flex justify-start">
                 <button type="submit" className="bg-yellow-400 hover:bg-yellow-300 text-white px-6 py-2 rounded">
                   Actualizar Solicitud
-                </button>
-                <button type="button" className="text-gray-600 underline" onClick={resetForm}>
-                  Cancelar edición
                 </button>
               </div>
             </form>
