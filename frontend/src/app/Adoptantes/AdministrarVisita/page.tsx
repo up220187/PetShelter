@@ -90,82 +90,153 @@ export default function AdministrarVisitasAdoptante() {
   const generarTicketPDF = async (visita: Visita) => {
     try {
       const jsPDF = await generatePDF();
-      const doc = new jsPDF();
-      
-      // Configuración inicial
-      doc.setFontSize(20);
-      doc.setTextColor(255, 140, 0); // Color naranja
-      doc.text('COMPROBANTE DE VISITA', 105, 30, { align: 'center' });
-      
-      // Línea decorativa
-      doc.setDrawColor(255, 140, 0);
-      doc.setLineWidth(2);
-      doc.line(20, 40, 190, 40);
-      
-      // Información de la visita
-      doc.setFontSize(14);
-      doc.setTextColor(0, 0, 0);
-      doc.text('DATOS DE LA VISITA:', 20, 60);
-      
-      doc.setFontSize(12);
-      doc.text(`ID de Visita: #${visita._id.slice(-8).toUpperCase()}`, 20, 75);
-      doc.text(`Estado: ${visita.visEstadoVisita}`, 20, 85);
-      doc.text(`Fecha: ${formatDate(visita.visFechaVisita)}`, 20, 95);
-      doc.text(`Hora: ${visita.visHoraVisita}`, 20, 105);
-      
-      // Información de la mascota
-      doc.setFontSize(14);
-      doc.text('DATOS DE LA MASCOTA:', 20, 125);
-      
-      doc.setFontSize(12);
-      doc.text(`Nombre: ${getMascotaName(visita)}`, 20, 140);
-      
-      // Información del visitante
-      doc.setFontSize(14);
-      doc.text('DATOS DEL VISITANTE:', 20, 160);
-      
-      doc.setFontSize(12);
-      if (typeof visita.visIdUsuario === 'object' && visita.visIdUsuario) {
-        doc.text(`Nombre: ${visita.visIdUsuario.usuNombre}`, 20, 175);
-        doc.text(`Correo: ${visita.visIdUsuario.usuCorreo}`, 20, 185);
-      } else {
-        doc.text(`Usuario: ${user?.usuNombre || 'No disponible'}`, 20, 175);
-        doc.text(`Correo: ${user?.usuCorreo || 'No disponible'}`, 20, 185);
+      const docWidth = 210;
+      const docHeight = 220; 
+      const doc = new jsPDF('p', 'mm', [docWidth, docHeight]);
+
+      // --- Cargar imágenes ---
+      const loadImage = (src: string) => {
+        return new Promise<HTMLImageElement>((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'Anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = (error) => {
+            console.error(`Error al cargar la imagen ${src}:`, error);
+            reject(new Error(`Failed to load image: ${src}`));
+          };
+          img.src = src;
+        });
+      };
+
+      let logoImg: HTMLImageElement | undefined, pawsImg: HTMLImageElement | undefined;
+
+      try {
+        [logoImg, pawsImg] = await Promise.all([
+          loadImage('/logo1.png'), 
+          loadImage('/paws.png')   
+        ]);
+      } catch (error) {
+        console.error("No se pudieron cargar todas las imágenes para el PDF:", error);
+        console.log("Se generará un PDF sin las imágenes.");
       }
-      
-      // Información adicional según el estado
-      let yPos = 205;
+
+      // --- Encabezado ---
+      doc.setFillColor('#FFF7ED');
+      doc.rect(0, 0, docWidth, 40, 'F');
+
+      if (logoImg) {
+        doc.addImage(logoImg, 'PNG', 10, 10, 50, 20); 
+      }
+
+      // Título principal
+      doc.setFontSize(26);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor('#f97316');
+      doc.text('Confirmación de Visita', docWidth / 2, 25, { align: 'center' });
+
+      // --- Línea separadora y subtítulo ---
+      doc.setDrawColor('#E5D585');
+      doc.setLineWidth(1);
+      doc.line(20, 45, docWidth - 20, 45);
+
+      doc.setFontSize(18);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor('#333333');
+      doc.text('Detalles de tu Visita Programada', docWidth / 2, 55, { align: 'center' });
+
+      // --- Información de la Visita ---
+      let y = 70; 
+
+      doc.setFontSize(14);
+      doc.setTextColor('#444444');
+
+      // ID de Visita
+      doc.setFont('helvetica', 'bold');
+      doc.text('ID Visita:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`#${visita._id.slice(-8).toUpperCase()}`, 60, y);
+      y += 10;
+
+      // Estado
+      doc.setFont('helvetica', 'bold');
+      doc.text('Estado:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(visita.visEstadoVisita, 60, y);
+      y += 10;
+
+      // Mascota
+      doc.setFont('helvetica', 'bold');
+      doc.text('Mascota:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(getMascotaName(visita), 60, y);
+      y += 10;
+
+      // Fecha
+      doc.setFont('helvetica', 'bold');
+      doc.text('Fecha:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(formatDate(visita.visFechaVisita), 60, y);
+      y += 10;
+
+      // Hora
+      doc.setFont('helvetica', 'bold');
+      doc.text('Hora:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.text(visita.visHoraVisita, 60, y);
+      y += 10;
+
+      // Visitante
+      doc.setFont('helvetica', 'bold');
+      doc.text('Visitante:', 20, y);
+      doc.setFont('helvetica', 'normal');
+      const nombreVisitante = typeof visita.visIdUsuario === 'object' && visita.visIdUsuario 
+        ? visita.visIdUsuario.usuNombre 
+        : user?.usuNombre || 'Usuario';
+      doc.text(nombreVisitante, 60, y);
+      y += 15; 
+
+      // --- Secciones adicionales ---
+      const infoBoxY = y; 
+      doc.setFillColor('#F9F9F9');
+      doc.roundedRect(15, infoBoxY, docWidth - 30, 45, 5, 5, 'F');
+
+      doc.setFontSize(12);
+      doc.setTextColor('#555555');
+      doc.setFont('helvetica', 'bold');
+      doc.text('Información Importante:', 20, infoBoxY + 10);
+      doc.setFont('helvetica', 'normal');
+      doc.text('• Por favor, llega 10 minutos antes de tu visita.', 20, infoBoxY + 20);
+      doc.text('• Trae identificación oficial.', 20, infoBoxY + 27);
+      doc.text('• Prepara cualquier pregunta que tengas sobre la mascota.', 20, infoBoxY + 34);
+      y = infoBoxY + 50; 
+
+      // Recuadro naranja
+      const thanksBoxY = y; 
+      doc.setFillColor('#FFFBEB');
+      doc.roundedRect(15, thanksBoxY, docWidth - 30, 25, 5, 5, 'F');
+
+      doc.setFontSize(14);
+      doc.setTextColor('#f97316');
+      doc.setFont('helvetica', 'bold');
+      doc.text('¡Gracias por tu interés en la adopción!', docWidth / 2, thanksBoxY + 15, { align: 'center' });
+      y = thanksBoxY + 30; 
+
+      // --- Pie de página con Patitas y Texto ---
+      const footerTextY = docHeight - 15;
+      const copyrightTextY = docHeight - 10;
+      const pawsImgHeight = 60;
+      const pawsImgWidth = 35;
+
+      if (pawsImg) {
+        doc.addImage(pawsImg, 'PNG', docWidth - 20 - pawsImgWidth, docHeight - pawsImgHeight + 5, pawsImgWidth, pawsImgHeight);
+      }
+
       doc.setFontSize(10);
-      doc.setTextColor(128, 128, 128);
-      
-      if (visita.visEstadoVisita === 'Confirmada') {
-        doc.text('INSTRUCCIONES:', 20, yPos);
-        yPos += 10;
-        doc.text('• Presente este comprobante al llegar al refugio', 20, yPos);
-        yPos += 8;
-        doc.text('• Llegue 10 minutos antes de la hora programada', 20, yPos);
-        yPos += 8;
-        doc.text('• Traiga identificación oficial', 20, yPos);
-      } else if (visita.visEstadoVisita === 'Realizada') {
-        doc.text('Esta visita ha sido completada exitosamente.', 20, yPos);
-      } else if (visita.visEstadoVisita === 'Cancelada') {
-        doc.text('Esta visita ha sido cancelada.', 20, yPos);
-      }
-      
-      // Pie de página
-      yPos += 20;
-      doc.text('Este documento sirve como comprobante de su visita programada.', 105, yPos, { align: 'center' });
-      yPos += 8;
-      doc.text('Para más información, contacte al refugio.', 105, yPos, { align: 'center' });
-      
-      // Fecha de generación
-      yPos += 15;
-      const fechaGeneracion = new Date().toLocaleDateString('es-ES');
-      const horaGeneracion = new Date().toLocaleTimeString('es-ES');
-      doc.text(`Documento generado el: ${fechaGeneracion} a las ${horaGeneracion}`, 105, yPos, { align: 'center' });
-      
-      // Descargar PDF
-      const nombreArchivo = `Ticket_Visita_${getMascotaName(visita).replace(/\s+/g, '_')}_${formatDate(visita.visFechaVisita).replace(/\//g, '-')}.pdf`;
+      doc.setTextColor('#888888');
+      doc.text('Documento generado automáticamente por PetShelter.', 20, footerTextY);
+      doc.text('Visítanos en www.PetShelter.com', 20, copyrightTextY);
+
+      const nombreArchivo = `cita_mascota_${getMascotaName(visita).replace(/\s/g, '_')}_${formatDate(visita.visFechaVisita).replace(/\//g, '-')}.pdf`;
       doc.save(nombreArchivo);
       
     } catch (error) {
