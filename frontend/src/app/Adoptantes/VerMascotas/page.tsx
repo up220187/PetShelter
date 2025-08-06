@@ -86,17 +86,16 @@ export default function ViewPetsPage() {
 
   const handleSolicitarVisitaClick = () => {
     if (selectedPet) {
-      // Assuming 'solicitar-visita' is the correct page for visit requests
-router.push(`/Adoptantes/solicitarvisita?mascotaId=${selectedPet._id}&petName=${selectedPet.masNombre}`);
+      // Redirigir a la página de solicitar visita con el ID de la mascota
+      router.push(`/Adoptantes/SolicitarVisita?mascotaId=${selectedPet._id}`);
     }
   };
 
   // NEW: Handler for the "Solicitar Adopción" button
   const handleSolicitarAdopcionClick = () => {
     if (selectedPet) {
-      // Assuming 'solicitar-adopcion' is the correct page for adoption requests
-      // Make sure the path is correct based on your file structure
-      router.push(`/dashboard/customer/solicitar-adopcion?petId=${selectedPet._id}&petName=${selectedPet.masNombre}`);
+      // Redirigir a la página de solicitar adopción con el ID de la mascota
+      router.push(`/Adoptantes/SolicitarAdopcion?mascotaId=${selectedPet._id}`);
     }
   };
 
