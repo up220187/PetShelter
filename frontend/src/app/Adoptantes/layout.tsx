@@ -42,12 +42,7 @@ export default function AdoptanteLayout({ children }: { children: React.ReactNod
             />
           </Link>
         </div>
-        <div className="search-and-nav-section">
-          <div className="search-bar-wrapper">
-            <input type="text" placeholder="Buscar..." className="search-input" />
-            <FilterIcon sx={{ fontSize: 24 }} className="filter-icon" />
-            <SearchIcon sx={{ fontSize: 24 }} className="search-icon" />
-          </div>
+        <div className="search-and-nav-sectionn">
           <nav className="adoptante-nav">
             <Link href="/Adoptantes/VerMascotas">
               <VerMascotasButton />
