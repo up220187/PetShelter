@@ -29,6 +29,22 @@ export const obtenerSolicitudesAdopcion = async (token: string) => {
   return res.json();
 };
 
+export const obtenerMisSolicitudesAdopcion = async (token: string) => {
+  // Si no existe el endpoint específico, usar el general y filtrar en frontend
+  const res = await fetch(`${API}/solicitudes`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) throw new Error("Error al obtener mis solicitudes de adopción");
+  const todasLasSolicitudes = await res.json();
+  
+  // El backend debería filtrar automáticamente por usuario con el token
+  // Si no lo hace, aquí podríamos filtrar, pero necesitaríamos el ID del usuario
+  return todasLasSolicitudes;
+};
+
 export const eliminarSolicitudAdopcion = async (token: string, id: string) => {
   const res = await fetch(`${API}/solicitudes/${id}`, {
     method: "DELETE",

@@ -38,7 +38,7 @@ export default function AdministrarMascotas() {
     masEsterilizado: false,
     masEstadoSalud: "",
     masRaza: "",
-    masNacimiento: "",
+    masNacimiento: new Date().toISOString().split('T')[0], // Fecha de hoy por defecto
     masImagen: "",
   });
 
@@ -83,7 +83,7 @@ useEffect(() => {
       masEsterilizado: false,
       masEstadoSalud: "",
       masRaza: "",
-      masNacimiento: "",
+      masNacimiento: new Date().toISOString().split('T')[0], // Fecha de hoy por defecto
       masImagen: "",
     });
     setSelectedPet(null);
@@ -93,6 +93,18 @@ useEffect(() => {
     const { name, value, type } = e.target;
     const isCheckbox = type === "checkbox";
     const checked = isCheckbox ? (e.target as HTMLInputElement).checked : undefined;
+
+    // Validación especial para fecha de nacimiento
+    if (name === "masNacimiento" && value) {
+      const fechaSeleccionada = new Date(value);
+      const hoy = new Date();
+      hoy.setHours(23, 59, 59, 999);
+      
+      if (fechaSeleccionada > hoy) {
+        alert("La fecha de nacimiento no puede ser futura.");
+        return; // No actualizar el estado si la fecha es inválida
+      }
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -138,6 +150,19 @@ console.log("TOKEN:", token);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validar que la fecha de nacimiento no sea futura
+    if (formData.masNacimiento) {
+      const fechaNacimiento = new Date(formData.masNacimiento);
+      const hoy = new Date();
+      hoy.setHours(23, 59, 59, 999); // Permitir hasta el final del día actual
+      
+      if (fechaNacimiento > hoy) {
+        alert("La fecha de nacimiento no puede ser futura.");
+        return;
+      }
+    }
+    
     const method = selectedPet ? "PUT" : "POST";
     const endpoint = selectedPet ? `/mascotas/${selectedPet._id}` : "/mascotas";
 
@@ -223,7 +248,15 @@ console.log("TOKEN:", token);
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
           <input name="masNombre" placeholder="Nombre" value={formData.masNombre || ""} onChange={handleChange} className="input" />
           <input name="masRaza" placeholder="Raza" value={formData.masRaza || ""} onChange={handleChange} className="input" />
-          <input type="date" name="masNacimiento" value={formData.masNacimiento || ""} onChange={handleChange} className="input" />
+          <input 
+            type="date" 
+            name="masNacimiento" 
+            value={formData.masNacimiento || ""} 
+            onChange={handleChange} 
+            max={new Date().toISOString().split('T')[0]}
+            className="input" 
+            title="La fecha no puede ser futura"
+          />
 
           <select name="masSexo" value={formData.masSexo || ""} onChange={handleChange} className="input">
             <option value="Macho">Macho</option>

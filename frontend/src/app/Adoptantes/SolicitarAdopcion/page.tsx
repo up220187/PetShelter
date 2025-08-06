@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
-import { crearSolicitudAdopcion } from "../../services/adopcionService";
+import { crearSolicitudAdopcion, obtenerMisSolicitudesAdopcion } from "../../services/adopcionService";
 import { getMascotaPorId } from "../../services/mascotaService";
 
 interface Mascota {
@@ -12,6 +12,19 @@ interface Mascota {
   masImagen?: string;
   masRaza: string;
   masTipo: string;
+}
+
+interface SolicitudAdopcion {
+  _id: string;
+  solIdMascota: {
+    _id: string;
+    masNombre: string;
+    masRaza: string;
+    masTipo: string;
+    masImagen?: string;
+  };
+  solFechaSolicitud: string;
+  solEstado: string;
 }
 
 export default function SolicitarAdopcionPage() {
@@ -23,6 +36,7 @@ export default function SolicitarAdopcionPage() {
   const [mascota, setMascota] = useState<Mascota | null>(null);
   const [mensaje, setMensaje] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [misSolicitudes, setMisSolicitudes] = useState<SolicitudAdopcion[]>([]);
 
   useEffect(() => {
     if (!idMascota || !token) return;
@@ -30,6 +44,36 @@ export default function SolicitarAdopcionPage() {
       .then(setMascota)
       .catch(() => setMensaje("Error al cargar mascota"));
   }, [idMascota, token]);
+
+  // Cargar las solicitudes del usuario
+  useEffect(() => {
+    if (!token) return;
+    obtenerMisSolicitudesAdopcion(token)
+      .then(setMisSolicitudes)
+      .catch(() => console.log("Error al cargar mis solicitudes"));
+  }, [token]);
+
+  const getEstadoColor = (estado: string) => {
+    switch (estado.toLowerCase()) {
+      case 'aprobada':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'rechazada':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    }
+  };
+
+  const getEstadoIcon = (estado: string) => {
+    switch (estado.toLowerCase()) {
+      case 'aprobada':
+        return '✅';
+      case 'rechazada':
+        return '❌';
+      default:
+        return '⏳';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +96,11 @@ export default function SolicitarAdopcionPage() {
       await crearSolicitudAdopcion(token, nuevaSolicitud);
       setMensaje("Solicitud de adopción enviada exitosamente!");
       
+      // Actualizar la lista de solicitudes
+      obtenerMisSolicitudesAdopcion(token)
+        .then(setMisSolicitudes)
+        .catch(() => console.log("Error al actualizar solicitudes"));
+      
       // Redirigir después de 3 segundos
       setTimeout(() => {
         router.push("/Adoptantes/VerMascotas");
@@ -72,7 +121,83 @@ export default function SolicitarAdopcionPage() {
   }, [mensaje]);
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6">
+      {/* Mis Solicitudes - Sección prominente al inicio */}
+      {misSolicitudes.length > 0 && (
+        <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl shadow-lg border border-blue-200">
+          <h2 className="text-2xl font-bold text-blue-800 mb-6 flex items-center">
+            📋 Estado de mis Solicitudes de Adopción
+          </h2>
+          <div className="grid gap-4">
+            {misSolicitudes.map((solicitud) => (
+              <div
+                key={solicitud._id}
+                className={`p-4 rounded-lg border-2 transition-all ${getEstadoColor(solicitud.solEstado)}`}
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={solicitud.solIdMascota?.masImagen || "/placeholder.jpg"}
+                    alt={solicitud.solIdMascota?.masNombre}
+                    className="w-20 h-20 object-cover rounded-full border-3 border-white shadow-md"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl mb-1">
+                      {solicitud.solIdMascota?.masNombre}
+                    </h3>
+                    <p className="text-gray-600 mb-2">
+                      {solicitud.solIdMascota?.masRaza} • {solicitud.solIdMascota?.masTipo}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      📅 Solicitado el: {new Date(solicitud.solFechaSolicitud).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-center bg-white p-4 rounded-lg shadow-sm">
+                    <div className="text-2xl mb-2">{getEstadoIcon(solicitud.solEstado)}</div>
+                    <div className="font-bold text-lg capitalize mb-2">
+                      {solicitud.solEstado}
+                    </div>
+                    {solicitud.solEstado.toLowerCase() === 'aprobada' && (
+                      <div className="bg-green-100 px-3 py-2 rounded-full">
+                        <p className="text-sm font-semibold text-green-700">
+                          ¡Felicitaciones!
+                        </p>
+                        <p className="text-xs text-green-600">
+                          Tu adopción fue aprobada
+                        </p>
+                      </div>
+                    )}
+                    {solicitud.solEstado.toLowerCase() === 'rechazada' && (
+                      <div className="bg-red-100 px-3 py-2 rounded-full">
+                        <p className="text-sm font-semibold text-red-700">
+                          No aprobada
+                        </p>
+                        <p className="text-xs text-red-600">
+                          Puedes intentar con otra mascota
+                        </p>
+                      </div>
+                    )}
+                    {solicitud.solEstado.toLowerCase() === 'pendiente' && (
+                      <div className="bg-yellow-100 px-3 py-2 rounded-full">
+                        <p className="text-sm font-semibold text-yellow-700">
+                          En revisión
+                        </p>
+                        <p className="text-xs text-yellow-600">
+                          El refugio está evaluando tu solicitud
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-orange-500 mb-2">
           Solicitud de Adopción
