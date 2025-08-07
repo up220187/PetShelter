@@ -54,7 +54,7 @@ export default function AdministrarPerfilButton({ className = "", onClick }: Adm
       <button
         onClick={handleProfileClick}
         className={`
-          w-16 h-16 rounded-full
+          w-24 h-24 rounded-full
           hover:ring-4 hover:ring-[#E5D585] hover:ring-opacity-50
           active:ring-2 active:ring-[#E5D585]
           transition-all duration-150 ease-in-out
@@ -77,7 +77,7 @@ export default function AdministrarPerfilButton({ className = "", onClick }: Adm
               if (parent) {
                 parent.innerHTML = `
                   <div class="w-full h-full bg-[#E5D585] rounded-full flex items-center justify-center border-2 border-white">
-                    <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24">
                       <circle cx="12" cy="8" r="4" stroke="#261C14" stroke-width="2" />
                       <path d="M4 20c0-3.3137 3.134-6 7-6s7 2.6863 7 6" stroke="#261C14" stroke-width="2" stroke-linecap="round" />
                     </svg>
@@ -90,8 +90,8 @@ export default function AdministrarPerfilButton({ className = "", onClick }: Adm
           // Si no hay foto de perfil, mostrar ícono por defecto
           <div className="w-full h-full bg-[#E5D585] rounded-full flex items-center justify-center border-2 border-white">
             <svg
-              width="32"
-              height="32"
+              width="48"
+              height="48"
               fill="none"
               viewBox="0 0 24 24"
               aria-hidden="true"

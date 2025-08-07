@@ -98,21 +98,11 @@ useEffect(() => {
     if (name === "masNacimiento" && value) {
       const fechaSeleccionada = new Date(value);
       const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0); // Inicio del día actual
+      hoy.setHours(23, 59, 59, 999);
       
-      // Si es una mascota nueva (no se está editando), solo permitir la fecha de hoy
-      if (!selectedPet) {
-        const fechaHoy = new Date().toISOString().split('T')[0];
-        if (value !== fechaHoy) {
-          alert("Para mascotas nuevas, solo se permite la fecha del día actual.");
-          return; // No actualizar el estado si la fecha es inválida
-        }
-      } else {
-        // Si se está editando, permitir desde hoy en adelante
-        if (fechaSeleccionada < hoy) {
-          alert("La fecha de nacimiento no puede ser anterior al día actual.");
-          return; // No actualizar el estado si la fecha es inválida
-        }
+      if (fechaSeleccionada > hoy) {
+        alert("La fecha de nacimiento no puede ser futura.");
+        return; // No actualizar el estado si la fecha es inválida
       }
     }
 
@@ -161,25 +151,15 @@ console.log("TOKEN:", token);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validar que la fecha de nacimiento no sea anterior al día actual
+    // Validar que la fecha de nacimiento no sea futura
     if (formData.masNacimiento) {
       const fechaNacimiento = new Date(formData.masNacimiento);
       const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0); // Inicio del día actual
+      hoy.setHours(23, 59, 59, 999); // Permitir hasta el final del día actual
       
-      // Si es una mascota nueva (no se está editando), solo permitir la fecha de hoy
-      if (!selectedPet) {
-        const fechaHoy = new Date().toISOString().split('T')[0];
-        if (formData.masNacimiento !== fechaHoy) {
-          alert("Para mascotas nuevas, solo se permite la fecha del día actual.");
-          return;
-        }
-      } else {
-        // Si se está editando, permitir desde hoy en adelante
-        if (fechaNacimiento < hoy) {
-          alert("La fecha de nacimiento no puede ser anterior al día actual.");
-          return;
-        }
+      if (fechaNacimiento > hoy) {
+        alert("La fecha de nacimiento no puede ser futura.");
+        return;
       }
     }
     
@@ -273,10 +253,9 @@ console.log("TOKEN:", token);
             name="masNacimiento" 
             value={formData.masNacimiento || ""} 
             onChange={handleChange} 
-            min={selectedPet ? new Date().toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
-            max={selectedPet ? undefined : new Date().toISOString().split('T')[0]}
+            max={new Date().toISOString().split('T')[0]}
             className="input" 
-            title={selectedPet ? "La fecha no puede ser anterior al día actual" : "Para mascotas nuevas, solo se permite la fecha del día actual"}
+            title="La fecha no puede ser futura"
           />
 
           <select name="masSexo" value={formData.masSexo || ""} onChange={handleChange} className="input">
