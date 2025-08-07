@@ -7,6 +7,7 @@ interface User {
   usuNombre: string;
   usuCorreo: string;
   usuRol?: string;
+  usuFotoPerfil?: string;
 }
 
 interface AuthContextType {
@@ -14,6 +15,7 @@ interface AuthContextType {
   token: string | null;
   login: (token: string, user: User) => void;
   logout: () => void;
+  updateUser: (updatedUser: User) => void;
   isLoading: boolean;
   validateToken: () => Promise<boolean>;
 }
@@ -72,6 +74,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("authUser");
   };
 
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+    localStorage.setItem("authUser", JSON.stringify(updatedUser));
+  };
+
   const validateToken = async (): Promise<boolean> => {
     if (!token) return false;
     
@@ -100,7 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading, validateToken }}>
+    <AuthContext.Provider value={{ user, token, login, logout, updateUser, isLoading, validateToken }}>
       {children}
     </AuthContext.Provider>
   );

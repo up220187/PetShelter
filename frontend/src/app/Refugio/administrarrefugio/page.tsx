@@ -7,7 +7,7 @@ import { getRefugioPorIdUsuario, actualizarRefugio } from "../../services/refugi
 import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 
 export default function AdminRefugioPage() {
-  const { user, token } = useAuth();
+  const { user, token, updateUser } = useAuth();
 
   const [formData, setFormData] = useState({
     // Usuario
@@ -93,6 +93,14 @@ export default function AdminRefugioPage() {
         refHorarioAtencion: formData.refHorarioAtencion,
         refIdUsuario: user.usuId,
       });
+
+      // 3. Actualizar el usuario en el contexto con los nuevos datos
+      const updatedUser = {
+        ...user,
+        usuCorreo: formData.usuCorreo,
+        usuFotoPerfil: formData.usuFotoPerfil
+      };
+      updateUser(updatedUser);
 
       alert("Información del refugio actualizada correctamente");
     } catch (err) {

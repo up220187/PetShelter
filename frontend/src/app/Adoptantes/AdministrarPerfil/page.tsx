@@ -6,7 +6,7 @@ import { getUsuarioPorId, actualizarUsuario } from "../../services/usuarioServic
 import { uploadToCloudinary } from "../../utils/uploadToCloudinary";
 
 export default function AdoptanteProfilePage() {
-  const { user, token } = useAuth();
+  const { user, token, updateUser } = useAuth();
 
   const [formData, setFormData] = useState({
     usuNombre: "",
@@ -63,7 +63,17 @@ export default function AdoptanteProfilePage() {
   const handleSave = async () => {
     if (!user || !token) return;
     try {
-      await actualizarUsuario(user.usuId, token, formData);
+      const updatedData = await actualizarUsuario(user.usuId, token, formData);
+      
+      // Actualizar el usuario en el contexto con los nuevos datos
+      const updatedUser = {
+        ...user,
+        usuNombre: formData.usuNombre,
+        usuCorreo: formData.usuCorreo,
+        usuFotoPerfil: formData.usuFotoPerfil
+      };
+      updateUser(updatedUser);
+      
       alert("Perfil actualizado correctamente");
     } catch (err) {
       console.error(err);

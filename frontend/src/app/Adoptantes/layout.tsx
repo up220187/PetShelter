@@ -15,13 +15,6 @@ import AdministrarPerfilButton from "../components/Adoptante/AdministrarPerfil";
 
 export default function AdoptanteLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { logout } = useAuth(); 
-
-  const handleLogout = () => {
-    logout(); 
-    console.log('Sesión cerrada. Redirigiendo al login.');
-    router.push('/login');
-  };
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -56,25 +49,7 @@ export default function AdoptanteLayout({ children }: { children: React.ReactNod
             <Link href="/Adoptantes/AdministrarVisita">
               <AdministrarVisitaButton />
             </Link>
-            <Link href="/Adoptantes/AdministrarPerfil">
-              <AdministrarPerfilButton />
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="logout-button"
-              style={{
-                padding: '10px 15px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                marginLeft: '20px',
-                fontSize: '1rem',
-              }}
-            >
-              Cerrar Sesión
-            </button>
+            <AdministrarPerfilButton />
           </nav>
         </div>
       </header>

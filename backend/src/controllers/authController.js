@@ -135,7 +135,8 @@ exports.login = async (req, res) => {
                 usuId: user._id, // ← aquí se incluye el ID del usuario
                 usuCorreo: user.usuCorreo,
                 usuNombre: user.usuNombre,
-                usuRol: user.usuRol // opcional si manejas roles
+                usuRol: user.usuRol, // opcional si manejas roles
+                usuFotoPerfil: user.usuFotoPerfil // ← Agregar la foto de perfil
             }
         });
     } catch (error) {
