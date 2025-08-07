@@ -46,7 +46,12 @@ export default function AdministrarPerfilButton({ className = "", onClick }: Adm
 
   const handleGoToProfile = () => {
     setIsDropdownOpen(false);
-    router.push('/Adoptantes/AdministrarPerfil');
+    // Verificar el rol del usuario para redirigir a la página correcta
+    if (user?.usuRol === 'refugio') {
+      router.push('/Refugio/administrarrefugio');
+    } else {
+      router.push('/Adoptantes/AdministrarPerfil');
+    }
   };
 
   return (
