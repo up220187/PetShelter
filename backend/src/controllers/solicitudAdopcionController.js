@@ -72,6 +72,36 @@ exports.obtenerSolicitudes = async (req, res) => {
 
 /**
  * @swagger
+ * /solicitudes/mis-solicitudes:
+ *   get:
+ *     summary: Obtener las solicitudes de adopción del usuario autenticado
+ *     tags: [SolicitudesAdopcion]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de solicitudes del usuario
+ *       500:
+ *         description: Error del servidor
+ */
+exports.obtenerMisSolicitudes = async (req, res) => {
+  try {
+    const userId = req.user.userId; // Viene del middleware de autenticación
+    
+    const solicitudes = await SolicitudAdopcion.find({ solIdUsuario: userId })
+      .populate('solIdUsuario')
+      .populate('solIdMascota')
+      .sort({ solFechaSolicitud: -1 }); // Ordenar por fecha más reciente primero
+
+    res.json(solicitudes);
+  } catch (error) {
+    console.error('Error al obtener solicitudes del usuario:', error);
+    res.status(500).json({ error: 'Error al obtener mis solicitudes' });
+  }
+};
+
+/**
+ * @swagger
  * /solicitudes/{id}:
  *   get:
  *     summary: Obtener una solicitud de adopción por ID
@@ -144,11 +174,36 @@ exports.actualizarSolicitud = async (req, res) => {
         return res.status(400).json({ error: 'No se puede modificar la mascota de la solicitud.' });
       }
     }
+
+    // Obtener la solicitud actual antes de actualizarla
+    const solicitudActual = await SolicitudAdopcion.findById(req.params.id);
+    if (!solicitudActual) {
+      return res.status(404).json({ error: 'Solicitud no encontrada' });
+    }
+
+    // Actualizar la solicitud
     const solicitud = await SolicitudAdopcion.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
+
+    // Si la solicitud fue aprobada, rechazar automáticamente todas las demás solicitudes pendientes para la misma mascota
+    if (req.body.solEstado === 'Aprobada') {
+      const result = await SolicitudAdopcion.updateMany(
+        {
+          solIdMascota: solicitudActual.solIdMascota,
+          _id: { $ne: req.params.id }, // Excluir la solicitud actual
+          solEstado: 'Pendiente' // Solo actualizar las que están pendientes
+        },
+        {
+          $set: { solEstado: 'Rechazada' }
+        }
+      );
+      console.log(`Solicitud ${req.params.id} aprobada para mascota ${solicitudActual.solIdMascota}`);
+      console.log(`${result.modifiedCount} solicitudes adicionales fueron rechazadas automáticamente`);
+    }
+
     res.json(solicitud);
   } catch (error) {
     res.status(400).json({ error: error.message });

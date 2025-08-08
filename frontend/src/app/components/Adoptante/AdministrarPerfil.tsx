@@ -39,9 +39,11 @@ export default function AdministrarPerfilButton({ className = "", onClick }: Adm
   };
 
   const handleLogout = () => {
+    setIsDropdownOpen(false);
     logout();
     console.log('Sesión cerrada. Redirigiendo al login.');
-    router.push('/login');
+    // Usar replace en lugar de push para evitar que el usuario pueda volver atrás
+    router.replace('/login');
   };
 
   const handleGoToProfile = () => {

@@ -20,6 +20,10 @@ router.get('/', [
     query('limit').optional().isInt({ min: 1 }).withMessage('Limit must be a positive integer')
 ], validate, solicitudController.obtenerSolicitudes);
 
+router.get('/mis-solicitudes', [
+    authMiddleware
+], solicitudController.obtenerMisSolicitudes);
+
 router.get('/:id', [
     authMiddleware,
     param('id').isMongoId().withMessage('El ID debe ser un ID de MongoDB válido')

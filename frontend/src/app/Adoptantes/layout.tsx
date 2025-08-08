@@ -15,14 +15,16 @@ import AdministrarPerfilButton from "../components/Adoptante/AdministrarPerfil";
 
 export default function AdoptanteLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { token, isLoading, user } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.log('Layout: No se encontró authToken de sesión en localStorage. Redirigiendo al login.');
+    if (isLoading) return; // Esperar a que termine de cargar
+    
+    if (!token || !user) {
+      console.log('AdoptanteLayout: No hay token de autenticación o usuario. Redirigiendo al login.');
       router.push('/login');
     }
-  }, [router]);
+  }, [router, token, isLoading, user]);
 
   return (
     <div className="adoptante-layout-container">

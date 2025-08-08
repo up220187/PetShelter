@@ -253,27 +253,25 @@ export default function AdministrarSolicitudes() {
         }
       }
 
-      // 4. Refrescar la lista completa
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes`, {
+      // 4. Refrescar la lista completa para ver los cambios automáticos
+      const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/solicitudes`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then(res => res.json())
-      .then(data => {
+      });
+      
+      if (refreshResponse.ok) {
+        const data = await refreshResponse.json();
         if (Array.isArray(data)) {
           setSolicitudes(data);
-          const updatedSolicitud = data.find(s => s._id === selectedSolicitud._id);
-          if (updatedSolicitud) {
-            setSelectedSolicitud(updatedSolicitud);
-            setFormData({
-              solEstado: updatedSolicitud.solEstado,
-            });
-          }
+          console.log('Lista de solicitudes actualizada correctamente');
+          // Limpiar la selección actual para mostrar los cambios
+          resetForm();
         }
-      })
-      .catch(err => console.error('Error al refrescar datos:', err));
+      } else {
+        console.error('Error al refrescar la lista de solicitudes');
+      }
 
     } catch (error) {
       console.error('Error completo:', error);

@@ -8,15 +8,16 @@ import { useAuth } from "../context/AuthContext";
 
 export default function AdoptanteDashboard() {
   const router = useRouter();
+  const { token, isLoading, user } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-      console.log('AdoptanteDashboard: No se encontró authToken de sesión. Redirigiendo al login.');
+    if (isLoading) return; // Esperar a que termine de cargar
+    
+    if (!token || !user) {
+      console.log('AdoptanteDashboard: No hay token de autenticación o usuario. Redirigiendo al login.');
       router.push('/login');
     }
-  }, [router]);
+  }, [router, token, isLoading, user]);
 
   return (
     <div className="shelter-dashboard-content">

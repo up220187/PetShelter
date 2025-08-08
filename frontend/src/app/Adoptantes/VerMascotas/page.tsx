@@ -27,13 +27,13 @@ export default function ViewPetsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { token, isLoading } = useAuth();
+  const { token, isLoading, user } = useAuth();
 
   useEffect(() => {
     if (isLoading) return; // Esperar a que termine de cargar
 
-    if (!token) {
-      console.error('No hay token de autenticación');
+    if (!token || !user) {
+      console.log('VerMascotas: No hay token de autenticación o usuario.');
       setLoading(false);
       return;
     }
@@ -78,7 +78,7 @@ export default function ViewPetsPage() {
     };
 
     fetchMascotas();
-  }, [token, isLoading]);
+  }, [token, isLoading, user, router]);
 
   const handleSelectPet = (pet: Mascota) => {
     setSelectedPet(pet);

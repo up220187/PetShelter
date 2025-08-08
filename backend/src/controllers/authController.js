@@ -225,3 +225,53 @@ exports.refreshToken = async (req, res) => {
         errorHandler(error, req, res);
     }
 };
+
+/**
+ * @swagger
+ * /auth/validate:
+ *   get:
+ *     summary: Valida el token de acceso
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token válido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 valid:
+ *                   type: boolean
+ *                   description: Indica si el token es válido
+ *                 user:
+ *                   type: object
+ *                   description: Información del usuario
+ *       401:
+ *         description: Token inválido o expirado
+ *       500:
+ *         description: Error interno del servidor
+ */
+exports.validateToken = async (req, res) => {
+    try {
+        // El middleware de autenticación ya validó el token y agregó req.user
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(401).json({ valid: false, message: 'Usuario no encontrado' });
+        }
+
+        res.status(200).json({ 
+            valid: true, 
+            user: {
+                usuId: user._id,
+                usuCorreo: user.usuCorreo,
+                usuNombre: user.usuNombre,
+                usuRol: user.usuRol,
+                usuFotoPerfil: user.usuFotoPerfil
+            }
+        });
+    } catch (error) {
+        errorHandler(error, req, res);
+    }
+};

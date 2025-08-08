@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const authMiddleware = require('../middlewares/authMiddlewares');
 
 const { body, param, query } = require('express-validator');
 const { registerLimiter } = require('../middlewares/rateLimiter');
@@ -19,5 +20,7 @@ router.post('/register', [
 router.post('/refresh-token', [
     body('refreshToken').notEmpty().withMessage('El token de refresco es requerido')
 ], authController.refreshToken);
+
+router.get('/validate', authMiddleware, authController.validateToken);
 
 module.exports = router;
